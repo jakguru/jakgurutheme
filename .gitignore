@@ -57,3 +57,8 @@ Temporary Items
 
 # sftp configuration file
 sftp-config.json
+
+# sass
+.sass-cache
+/vendor/
+/node_modules/
