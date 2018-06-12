@@ -27,7 +27,7 @@ const JS_SOURCES = [
  * Compile Sass files
  */
 gulp.task('compile:sass', () =>
-  rsass(SASS_SOURCES,{ base: './', style: 'compressed', verbose: true })
+  rsass(SASS_SOURCES,{ base: './', style: 'expanded', verbose: true })
     .on('error', sass.logError)
     .pipe(plumber())
     .pipe(postcss([
@@ -36,13 +36,13 @@ gulp.task('compile:sass', () =>
         cascade: false,
       })
     ]))
-    .pipe(groupmq())
     .pipe(rename(function(file) {
         file.dirname = './';
         file.basename = file.basename + '.min';
         return file;
      }))
-    .pipe(concat('app.min.css'))
+    .pipe(concat('app.min.css',{newLine: "\n\n\n"}))
+    .pipe(groupmq())
     .pipe(cleanCSS({level: {1: {specialComments: 0}}}))
     .pipe(gulp.dest('assets/css')) );
 

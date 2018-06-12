@@ -3,7 +3,105 @@
  */
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
+/**
+ * Define System UI Colors
+ */
+$desktop: 						#346DA1;
+$text-color:					#000000;
+$panel-bg:						#D5D2CD;
+$border-outer-light:			#d7d4cf;
+$border-inner-light:			#fff;
+$border-outer-dark:				#403f40;
+$border-inner-dark:				#858385;
+$title-default-gradient-start:	#858385;
+$title-default-gradient-end:	#c7c4c7;
+$title-default-text-color:		#d7d4cf;
+$title-active-gradient-start:	#011f6e;
+$title-active-gradient-end:		#aaccfa;
+$title-active-text-color:		#fff;
+$os-identifier-gradient-start:	#a0a1f4;
+$os-identifier-gradient-end:	#000;
+$menu-highlight-color:			#021e6e;
+
+/**
+ * Start Inline Styles
+ */
 html,
 body {
 	min-height: 100vh;
+	background: $desktop;
+	background-color: $desktop;
+	color: $text-color;
+}
+
+*,
+*:active,
+*:focus,
+*:hover {
+	color: $text-color;
+	cursor: default;
+}
+
+body > header.sysui-panel-outer {
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 1080;
+}
+
+body > header.sysui-panel-outer > .sysui-panel-inner {
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+	padding: 2px;
+	height: 27px;
+}
+
+.sysui-panel-outer {
+	background: $panel-bg;
+	background-color: $panel-bg;
+	border: solid 1px;
+	border-top-color: $border-outer-light;
+	border-left-color: $border-outer-light;
+	border-bottom-color: $border-outer-dark;
+	border-right-color: $border-outer-dark;
+}
+
+.sysui-panel-inner {
+	border: solid 1px;
+	border-top-color: $border-inner-light;
+	border-left-color: $border-inner-light;
+	border-bottom-color: $border-inner-dark;
+	border-right-color: $border-inner-dark;
+	display: block;
+}
+
+.start-panel-seperator-wrapper {
+	overflow: visible;
+	width: 0px;
+	border-left: solid 1px $border-inner-dark;
+	border-right: solid 1px $border-inner-light;
+	height: 22px;
+	position: relative;
+	margin-right: 9px;
+	display: inline-block;
+}
+
+.start-panel-seperator-wrapper > .start-panel-seperator-relic {
+	width: 3px;
+	background: $panel-bg;
+	background-color: $panel-bg;
+	border: solid 1px;
+	border-top-color: $border-inner-light;
+	border-left-color: $border-inner-light;
+	border-bottom-color: $border-inner-dark;
+	border-right-color: $border-inner-dark;
+	height: 18px;
+	position: relative;
+	top: 2px;
+	left: 2px;
 }

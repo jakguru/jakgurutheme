@@ -34,5 +34,8 @@
     "gulp-uglify": "^3.0.0",
     "node-sass": "^4.9.0",
     "path": "^0.12.7"
+  },
+  "dependencies": {
+    "sprintf-js": "^1.1.1"
   }
 }
