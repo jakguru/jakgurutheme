@@ -1,8 +1,23 @@
 /**
+ * Define Fonts
+ */
+@font-face {
+  font-family: 'MSSansSerif';
+  src: url('../fonts/MicrosoftSansSerif.woff') format('woff'),
+  	   url('../fonts/MicrosoftSansSerif.woff2') format('woff2'),
+       url('../fonts/micross.ttf')  format('truetype');
+}
+
+/**
  * Import Dependancies
  */
+$font-family-sans-serif: 	"MSSansSerif", Arial, sans-serif !default;
+$font-family-base:          $font-family-sans-serif !default;
+
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
+$font-family-sans-serif: 	"MSSansSerif", Arial, sans-serif !default;
+$font-family-base:          $font-family-sans-serif !default;
 /**
  * Define System UI Colors
  */
@@ -37,9 +52,13 @@ body {
 *,
 *:active,
 *:focus,
-*:hover {
+*:hover,
+button:focus {
 	color: $text-color;
-	cursor: default;
+	outline: none;
+	outline-color: transparent;
+	transition: border-color 100;
+	line-height: 0;
 }
 
 body > header.sysui-panel-outer {
@@ -58,10 +77,10 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	border-right: none;
 	border-bottom: none;
 	padding: 2px;
-	height: 27px;
 }
 
-.sysui-panel-outer {
+.sysui-panel-outer,
+.sysui-button-outer {
 	background: $panel-bg;
 	background-color: $panel-bg;
 	border: solid 1px;
@@ -69,15 +88,48 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	border-left-color: $border-outer-light;
 	border-bottom-color: $border-outer-dark;
 	border-right-color: $border-outer-dark;
+	padding: 0;
 }
 
-.sysui-panel-inner {
+.sysui-button-outer {
+	border-top-color: $border-inner-light;
+	border-left-color: $border-inner-light;
+}
+
+.sysui-panel-inner,
+.sysui-button-inner {
 	border: solid 1px;
 	border-top-color: $border-inner-light;
 	border-left-color: $border-inner-light;
 	border-bottom-color: $border-inner-dark;
 	border-right-color: $border-inner-dark;
 	display: block;
+	padding: 0;
+}
+
+.sysui-button-inner {
+	border-top-color: $border-outer-light;
+	border-left-color: $border-outer-light;
+	display: block;
+	height: 100%;
+}
+
+.sysui-button-outer:focus,
+.sysui-button-outer:active,
+.sysui-button-outer.active {
+	border-top-color: $border-outer-dark;
+	border-left-color: $border-outer-dark;
+	border-right-color: $border-inner-light;
+	border-bottom-color: $border-inner-light;
+}
+
+.sysui-button-outer:focus > .sysui-button-inner,
+.sysui-button-outer:active > .sysui-button-inner,
+.sysui-button-outer.active > .sysui-button-inner {
+	border-top-color: $border-inner-dark;
+	border-left-color: $border-inner-dark;
+	border-right-color: $border-outer-light;
+	border-bottom-color: $border-outer-light;
 }
 
 .start-panel-seperator-wrapper {
@@ -87,8 +139,10 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	border-right: solid 1px $border-inner-light;
 	height: 22px;
 	position: relative;
-	margin-right: 9px;
+	margin-right: 5px;
+	margin-left: 4px;
 	display: inline-block;
+	float: left;
 }
 
 .start-panel-seperator-wrapper > .start-panel-seperator-relic {
@@ -104,4 +158,99 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	position: relative;
 	top: 2px;
 	left: 2px;
+	display: inline-block;
+}
+
+.sysui-quick-links {
+	display: table;
+}
+
+.sysui-quick-links > a {
+	display: table-cell;
+	cursor: pointer;
+}
+
+.sysui-quick-links > a > span {
+	display: inline-block;
+	padding: 4px;
+}
+
+.sysui-quick-links > a > span > img {
+	width: 16px;
+	height: 16px;
+}
+
+#sysui-taskbar-outer {
+	display: table;
+	table-layout: auto;
+	width: 100%;
+}
+
+#sysui-taskbar-outer > * {
+	display: table-cell;
+	vertical-align: top;
+	white-space:nowrap;
+	clear: both;
+}
+
+#sysui-start {
+	font-size: 10px;
+	font-weight: 900;
+	float: left;
+}
+
+#sysui-start > * {
+	padding: 0 3px;
+	text-align: center;
+	display: table;
+}
+
+#sysui-start-icon,
+#sysui-start-content {
+	padding: 0;
+	display: table-cell;
+	vertical-align: middle;
+	line-height: 7px;
+}
+
+#sysui-start-icon > a {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin: 2px 2px 2px 0;
+}
+
+#sysui-start-icon > a > img {
+	display: flex;
+	width: 14px;
+	height: 14px;
+}
+
+#sysui-quick-launch-area {
+	display: inline-block;
+	clear: both;
+	float: left;
+}
+
+#sysui-notifications {
+	border: solid 1px;
+	border-top-color: $border-inner-dark;
+	border-left-color: $border-inner-dark;
+	border-bottom-color: $border-inner-light;
+	border-right-color: $border-inner-light;
+	display: table;
+	height: 22px;
+	float: right;
+	padding: 0 16px 0 3px;
+}
+
+#sysui-notifications > * {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#sysui-notifications-clock {
+	font-size: 10px;
+	position: relative;
+	top: 2px;
 }

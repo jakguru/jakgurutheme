@@ -1,0 +1,26 @@
+.menu-image-field {
+	display: table;
+	margin-bottom: 10px;
+}
+
+.menu-image-field > * {
+	display: table-cell;
+	vertical-align: bottom;
+}
+
+.image-preview {
+	width: 60px;
+	height: 60px;
+	border: dotted 1px;
+	background: #AEAEAE;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+
+.image-control-wrapper {
+	padding-left: 5px;
+}
+
+.image-control-wrapper .button {
+	margin-right: 5px;
+}

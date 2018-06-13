@@ -33,11 +33,18 @@ This project has the following gulp commands configured:
 ```
 .
 ├── assets
+│   ├── admin
+│   │   ├── admin.css
+│   │   ├── admin.js
+│   │   └── index.php
 │   ├── css
 │   │   ├── app.min.css
 │   │   └── index.php
 │   ├── fonts
-│   │   └── index.php
+│   │   ├── index.php
+│   │   ├── MicrosoftSansSerif.woff
+│   │   ├── MicrosoftSansSerif.woff2
+│   │   └── micross.ttf
 │   ├── images
 │   │   └── index.php
 │   ├── index.php
@@ -62,8 +69,13 @@ This project has the following gulp commands configured:
 ├── package.json
 ├── package-lock.json
 ├── private
+│   ├── class-additional-menu-fields-utility.php
 │   ├── class-theme-utils.php
-│   └── index.php
+│   ├── class-wp-customize-utility.php
+│   ├── index.php
+│   └── menu-walkers
+│       ├── class-quick-links-nav-walker.php
+│       └── index.php
 ├── README.md
 └── style.css
 ```

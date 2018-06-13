@@ -36,6 +36,7 @@
     "path": "^0.12.7"
   },
   "dependencies": {
+    "moment": "^2.22.2",
     "sprintf-js": "^1.1.1"
   }
 }
