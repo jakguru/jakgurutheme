@@ -63,13 +63,31 @@ This project has the following gulp commands configured:
 │   │   ├── MicrosoftSansSerif.woff2
 │   │   └── micross.ttf
 │   ├── images
+│   │   ├── close.png
 │   │   ├── controlpanel.png
+│   │   ├── defaultapp.png
+│   │   ├── desktop.png
+│   │   ├── documents.png
+│   │   ├── folder.png
+│   │   ├── forbidden.png
+│   │   ├── help.png
 │   │   ├── index.php
+│   │   ├── info.png
 │   │   ├── keys.png
 │   │   ├── link.png
 │   │   ├── lock.png
+│   │   ├── maximize.png
+│   │   ├── minimize.png
+│   │   ├── multiplefiles.png
+│   │   ├── notepad.png
+│   │   ├── openfolder.png
+│   │   ├── programs.png
 │   │   ├── search.png
-│   │   └── shutdown.png
+│   │   ├── shutdown.png
+│   │   ├── stop.png
+│   │   ├── system.png
+│   │   ├── text.png
+│   │   └── video.png
 │   ├── index.php
 │   ├── js
 │   │   ├── app.min.js
@@ -80,11 +98,13 @@ This project has the following gulp commands configured:
 │   │   ├── index.php
 │   │   ├── _startmenu.scss
 │   │   ├── _sysui.scss
+│   │   ├── _sysuiwindow.scss
 │   │   └── _taskbar.scss
 │   ├── sjs
 │   │   ├── bootstrap.js
 │   │   ├── core.js
-│   │   └── index.php
+│   │   ├── index.php
+│   │   └── sysui-windows.js
 │   └── sounds
 │       └── index.php
 ├── footer.php
@@ -106,4 +126,5 @@ This project has the following gulp commands configured:
 │       └── index.php
 ├── README.md
 └── style.css
+
 ```

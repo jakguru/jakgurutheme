@@ -51,8 +51,17 @@ var handle_desktop_click = function( e ) {
 	}
 }
 
+var handle_link_click = function( e ) {
+	var link = jQuery( this );
+	if ( 'undefined' !== typeof( link.attr( 'href' ) ) && '#' !== link.attr( 'href' ) ) {
+		e.preventDefault();
+		console.log( 'Link clicked for URL:' + link.attr( 'href' ) );
+	}
+}
+
 update_clock();
 setInterval( update_clock, 1000 );
 fix_start_menu_os_identifier_height();
 jQuery( '#sysui-start' ).on( 'click', handle_start_button_click );
 jQuery( document ).on( 'mouseup', handle_desktop_click );
+jQuery( 'a' ).on( 'click', handle_link_click );

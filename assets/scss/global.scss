@@ -19,7 +19,14 @@ $font-family-base:          $font-family-sans-serif !default;
 $font-family-sans-serif: 	"MSSansSerif", Arial, sans-serif !default;
 $font-family-base:          $font-family-sans-serif !default;
 
+body {
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+}
+
 @import "colors";
 @import "sysui";
 @import "taskbar";
 @import "startmenu";
+@import "sysuiwindow";

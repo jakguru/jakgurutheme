@@ -1,0 +1,137 @@
+.sysui-window {
+	position: absolute;
+}
+
+.sysui-window,
+.sysui-window > * {
+	max-width: 100vw;
+	max-height: calc( 100vh - 30px );
+}
+
+.sysui-window-titlebar {
+	display: flex;
+	width: 100%;
+	background: $inactive-window-title-gradient-start;
+	background: -moz-linear-gradient(left, $inactive-window-title-gradient-start 0%, $inactive-window-title-gradient-end 100%);
+	background: -webkit-linear-gradient(left, $inactive-window-title-gradient-start 0%,$inactive-window-title-gradient-end 100%);
+	background: linear-gradient(to right, $inactive-window-title-gradient-start 0%,$inactive-window-title-gradient-end 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$inactive-window-title-gradient-start, endColorstr=$inactive-window-title-gradient-end,GradientType=1 );
+	color: $inactive-window-title-color;
+	padding: 1px;
+}
+
+.sysui-window:focus .sysui-window-titlebar,
+.sysui-window:active .sysui-window-titlebar,
+.sysui-window.focused .sysui-window-titlebar {
+	background: $active-window-title-gradient-start;
+	background: -moz-linear-gradient(left, $active-window-title-gradient-start 0%, $active-window-title-gradient-end 100%);
+	background: -webkit-linear-gradient(left, $active-window-title-gradient-start 0%,$active-window-title-gradient-end 100%);
+	background: linear-gradient(to right, $active-window-title-gradient-start 0%,$active-window-title-gradient-end 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$active-window-title-gradient-start, endColorstr=$active-window-title-gradient-end,GradientType=1 );
+	color: $active-window-title-color;
+}
+
+.sysui-window-titlebar .sysui-window-titlebar-icon > img {
+	width: 18px;
+	height: 18px;
+	padding: 2px;
+}
+
+.sysui-window-titlebar-title {
+	font-size: 12px;
+	line-height: 18px;
+	padding: 0 2px;
+	flex-grow: 1;
+}
+
+.sysui-window:focus .sysui-window-titlebar .sysui-window-titlebar-title,
+.sysui-window:active .sysui-window-titlebar .sysui-window-titlebar-title,
+.sysui-window.focused .sysui-window-titlebar .sysui-window-titlebar-title {
+	color: $active-window-title-color;
+	font-weight: 900;
+}
+
+.sysui-window-titlebar-control {
+	display: block;
+	margin: 0;
+	height: 12px;
+	width: 14px;
+	border: none;
+	outline: none;
+}
+
+.sysui-window-titlebar-control-wrapper {
+	white-space: nowrap;
+	position: relative;
+	top: -0.5px;
+}
+
+.sysui-window-titlebar > button {
+	position: relative;
+	right: 1px;
+}
+
+.sysui-window-menubar-wrapper {
+	border: solid 1px $sysui-window-menubar-wrapper-border;
+	display: block;	
+}
+
+.sysui-window-menubar {
+	border: solid 1px;
+	border-top-color: $border-inner-light;
+	border-left-color: $border-inner-light;
+	border-bottom-color: $border-inner-dark;
+	border-right: none;
+	display: block;
+	padding: 0;
+	display: flex;
+}
+
+.sysui-window-menu {
+	position: relative;
+}
+
+.sysui-window-menu-title {
+	cursor: pointer;
+}
+
+.sysui-window-menu-title,
+.sysui-window-menu-dropdown > * > a {
+	font-size: 12px;
+	line-height: 14px;
+	padding: 2px 4px;
+	color: $text-color;
+}
+
+.sysui-window-menu-dropdown {
+	position: absolute;
+	top: calc( 100% - 2px );
+	display: none;
+}
+
+.sysui-window-menu:hover > .sysui-window-menu-dropdown,
+.sysui-window-menu:focus > .sysui-window-menu-dropdown,
+.sysui-window-menu:active > .sysui-window-menu-dropdown {
+	display: flex;
+}
+
+.sysui-window-menu:hover > .sysui-window-menu-title,
+.sysui-window-menu:focus > .sysui-window-menu-title,
+.sysui-window-menu:active > .sysui-window-menu-title,
+.sysui-window-menu-dropdown > * > a:hover,
+.sysui-window-menu-dropdown > * > a:focus,
+.sysui-window-menu-dropdown > * > a:active {
+	text-decoration: none;
+	background: $menu-highlight-color;
+	background-color: $menu-highlight-color;
+	color: $menu-highlight-text-color;
+}
+
+.sysui-panel-window-content {
+	overflow: auto;
+	height: calc( 100% - 42px );
+	display: block;
+	position: relative;
+	clear: both;
+	max-width: 100%;
+}

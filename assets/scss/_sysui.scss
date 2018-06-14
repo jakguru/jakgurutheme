@@ -50,6 +50,7 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 }
 
 .sysui-button-outer {
+	display: flex;
 	border-top-color: $border-inner-light;
 	border-left-color: $border-inner-light;
 }
@@ -68,7 +69,7 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 .sysui-button-inner {
 	border-top-color: $border-outer-light;
 	border-left-color: $border-outer-light;
-	display: block;
+	display: flex;
 	height: 100%;
 }
 
