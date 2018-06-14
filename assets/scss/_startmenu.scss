@@ -1,0 +1,185 @@
+.start-panel-seperator-wrapper {
+	overflow: visible;
+	width: 0px;
+	border-left: solid 1px $border-inner-dark;
+	border-right: solid 1px $border-inner-light;
+	height: 22px;
+	position: relative;
+	margin-right: 5px;
+	margin-left: 4px;
+	display: inline-block;
+	float: left;
+}
+
+.start-panel-seperator-wrapper > .start-panel-seperator-relic {
+	width: 3px;
+	background: $panel-bg;
+	background-color: $panel-bg;
+	border: solid 1px;
+	border-top-color: $border-inner-light;
+	border-left-color: $border-inner-light;
+	border-bottom-color: $border-inner-dark;
+	border-right-color: $border-inner-dark;
+	height: 18px;
+	position: relative;
+	top: 2px;
+	left: 2px;
+	display: inline-block;
+}
+
+.sysui-start-menu-item {
+	display: table;
+	min-width: 200px;
+}
+
+.sysui-start-menu-item > * {
+	display: table-cell;
+}
+
+.sysui-start-menu-item-icon-wrapper {
+	width: 18px;
+	height: 18px;
+	padding: 2px;
+}
+
+.sysui-start-menu-item-icon-wrapper > img {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}
+
+.sysui-start-menu-child-menu {
+	display: none;
+	position: absolute;
+	left: calc( 100% - 1px );
+	top: -2px;
+}
+
+*:hover > .sysui-start-menu-child-menu,
+.sysui-start-menu-child-menu:hover,
+*:focus > .sysui-start-menu-child-menu,
+.sysui-start-menu-child-menu:focus,
+*:active > .sysui-start-menu-child-menu,
+.sysui-start-menu-child-menu:active,
+.sysui-start-menu-child-menu.active {
+	display: flex;
+}
+
+.sysui-start-menu-seperator {
+	display: block;
+	margin: 4px;
+	border-top: solid 1px $border-inner-dark;
+	border-bottom: solid 1px $border-inner-light;
+}
+
+* > .sysui-start-menu-item-label {
+	white-space: nowrap;
+	font-size: 12px;
+	line-height: 18px;
+	padding-left: 5px;
+}
+
+#start-menu {
+	display: none;
+	position: fixed;
+	bottom: 28px;
+	left: 2px;
+	z-index: 1090;
+}
+
+#start-menu.active {
+	display: initial;
+}
+
+#start-menu-wrapper {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: no-wrap;
+	align-content: flex-start;
+}
+
+#start-menu-wrapper > * {
+	display: inline-block;
+	width: 100%;
+}
+
+#sysui-os-identifier {
+	width: 35px;
+	vertical-align: bottom;
+	background: $os-identifier-gradient-start;
+	background: -moz-linear-gradient(top, $os-identifier-gradient-start 0%, $os-identifier-gradient-end 100%);
+	background: -webkit-linear-gradient(top, $os-identifier-gradient-start 0%,$os-identifier-gradient-end 100%);
+	background: linear-gradient(to bottom, $os-identifier-gradient-start 0%,$os-identifier-gradient-end 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$os-identifier-gradient-start, endColorstr=$os-identifier-gradient-end,GradientType=0 );
+	overflow: hidden;
+}
+
+#sysui-os-identifier-rotated-content-outer {
+	width: 35px;
+	overflow: hidden;
+}
+
+#sysui-os-identifier-rotated-content-inner {
+	position: relative;
+	display: block;
+	font-size: 25px;
+	line-height: 35px;
+	white-space: nowrap;
+	color: $os-identifier-text-color;
+	font-weight: 900;
+	letter-spacing: -1px;
+	padding: 0 2px;
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	transform-origin: top left;
+}
+
+#sysui-start-menu {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: no-wrap;
+	align-content: flex-end;
+}
+
+#sysui-start-menu > * > .sysui-start-menu-item-icon-wrapper {
+	width: 40px;
+	height: 40px;
+	padding: 2.5px;
+}
+
+#sysui-start-menu > * > .sysui-start-menu-item-label {
+	padding: 7.5px;
+	line-height: 35px;
+	font-size: 14px;
+	white-space: nowrap;
+}
+
+#sysui-start-menu .sysui-start-menu-item {
+	text-decoration: none;
+	position: relative;
+}
+
+.sysui-start-menu-item.menu-item-has-children:after {
+	content: '▸';
+	color: $text-color;
+}
+
+.sysui-start-menu-item.menu-item-has-children:hover:after,
+.sysui-start-menu-item.menu-item-has-children:hover:focus,
+.sysui-start-menu-item.menu-item-has-children:hover:active, {
+	color: $menu-highlight-text-color;
+}
+
+.sysui-start-menu-item:hover,
+.sysui-start-menu-item:hover > .sysui-start-menu-item-label,
+.sysui-start-menu-item:focus,
+.sysui-start-menu-item:focus > .sysui-start-menu-item-label,
+.sysui-start-menu-item:active,
+.sysui-start-menu-item:active > .sysui-start-menu-item-label {
+	background: $menu-highlight-color;
+	background-color: $menu-highlight-color;
+	color: $menu-highlight-text-color;
+}

@@ -1,0 +1,145 @@
+.sysui-quick-links,
+.sysui-notifications-links {
+	display: table;
+}
+
+.sysui-quick-links > a,
+.sysui-notifications-links > a {
+	display: table-cell;
+	cursor: pointer;
+}
+
+.sysui-quick-links > a > span {
+	display: inline-block;
+	padding: 4px;
+}
+
+.sysui-notifications-links > a > span {
+	display: inline-block;
+	padding: 2px;
+}
+
+.sysui-quick-links > a > span > img,
+.sysui-notifications-links > a > span > img {
+	width: 16px;
+	height: 16px;
+}
+
+.popover-header,
+.popover-header:active,
+.popover-header:focus,
+.popover-header:hover,
+.popover-body,
+.popover-body:hover,
+.popover-body:focus,
+.popover-body:active {
+	line-height: 16px;
+}
+
+.popover {
+	padding: .5rem 0;
+}
+
+.popover,
+.popover-header {
+	background-color: $notification-bg;
+	font-size: 12px;
+}
+
+.bs-popover-auto[x-placement^=top] .arrow::after, .bs-popover-top .arrow::after {
+	border-top-color: $notification-bg;
+}
+
+.popover-header {
+	border-bottom: none;
+	font-weight: bold;
+	padding: 0 .75rem;
+}
+
+.popover-body {
+	padding: 0 .75rem;
+}
+
+#sysui-taskbar-outer {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: no-wrap;
+	align-content: flex-start;
+	width: 100%;
+}
+
+#sysui-taskbar-outer > * {
+	display: block;
+	vertical-align: top;
+	white-space:nowrap;
+	clear: both;
+	width:auto;
+}
+
+#sysui-start {
+	font-size: 10px;
+	font-weight: 900;
+	float: left;
+}
+
+#sysui-start > * {
+	padding: 0 3px;
+	text-align: center;
+	display: table;
+}
+
+#sysui-start-icon,
+#sysui-start-content {
+	padding: 0;
+	display: table-cell;
+	vertical-align: middle;
+	line-height: 7px;
+}
+
+#sysui-start-icon > a {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin: 2px 2px 2px 0;
+}
+
+#sysui-start-icon > a > img {
+	display: flex;
+	width: 14px;
+	height: 14px;
+}
+
+#sysui-quick-launch-area {
+	display: inline-block;
+	clear: both;
+	float: left;
+}
+
+#sysui-notifications {
+	border: solid 1px;
+	border-top-color: $border-inner-dark;
+	border-left-color: $border-inner-dark;
+	border-bottom-color: $border-inner-light;
+	border-right-color: $border-inner-light;
+	display: table;
+	height: 22px;
+	float: right;
+}
+
+#sysui-notifications > * {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 0 0 0 4px;
+}
+
+#sysui-notifications-clock {
+	font-size: 10px;
+	position: relative;
+	top: 2px;
+	padding: 0 16px;
+}
+
+#sysui-taskbar-programs-wrapper {
+	flex-grow: 1;
+	padding: 0 5px;
+}

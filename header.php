@@ -77,7 +77,14 @@
 							<span id="sysui-os-identifier-rotated-content-inner"><?php bloginfo( 'description', 'display' ) ?></span>
 						</span>
 					</div>
-					<div id="sysui-start-menu"></div>
+					<?php wp_nav_menu( array(
+						'theme_location' => 'start_menu',
+						'container' => false,
+						'menu_class' => 'sysui-start-menu',
+						'items_wrap' => '<nav id="sysui-start-menu" class="%2$s">%3$s</nav>',
+						'walker' => new Start_Menu_Nav_Walker(),
+						'fallback_cb' => array( 'Start_Menu_Nav_Walker', 'fallback' ),
+					) ); ?>
 				</div>
 			</div>
 		</nav>

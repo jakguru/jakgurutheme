@@ -10,7 +10,7 @@ if ( defined( 'JGT_THEME_BASE' ) ) {
 }
 
 define( 'JGT_THEME_BASE', realpath( dirname( __FILE__ ) ) );
-define( 'JGT_MUTHEME_PATH', ( str_replace( get_bloginfo( 'url' ), '', get_template_directory_uri() ) ) );
+define( 'JGT_MUTHEME_PATH', get_template_directory_uri() );
 
 /**
  * Load Theme Private Files
@@ -21,6 +21,7 @@ $private_files_to_be_loaded = array(
 	'class-additional-menu-fields-utility.php',
 	'menu-walkers/class-quick-links-nav-walker.php',
 	'menu-walkers/class-sysui-notifications-area-nav-walker.php',
+	'menu-walkers/class-start-menu-nav-walker.php',
 );
 
 foreach ( $private_files_to_be_loaded as $filename ) {
@@ -119,6 +120,7 @@ add_action('after_setup_theme', function () {
 	register_nav_menus( array(
 		'quick_links' => __( 'Quick Links' ),
 		'notification_area' => __( 'Notification Area' ),
+		'start_menu' => __( 'Start Menu' ),
 	) );
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'html5', array( 'caption', 'comment-form', 'comment-list', 'gallery', 'search-form' ) );
@@ -167,3 +169,13 @@ add_filter( 'wp_setup_nav_menu_item', array( $additional_menu_fields_utility, 's
 add_filter( 'wp_edit_nav_menu_walker', array( $additional_menu_fields_utility, 'nav_menu_walker' ), 10, 2 );
 add_action( 'wp_update_nav_menu_item', array( $additional_menu_fields_utility, 'update_nav_item' ) );
 add_action( 'wp_nav_menu_item_custom_fields', array( $additional_menu_fields_utility, 'render_custom_fields' ), 10, 4 );
+
+/** Add Additional Items to Start Menu */
+
+add_filter( 'wp_nav_menu_objects', function( $sorted_menu_items, $args ) {
+	if ( 'start_menu' == $args->theme_location ) {
+		$additional_items = Start_Menu_Nav_Walker::get_start_menu_nav_items();
+		$sorted_menu_items = array_merge( $sorted_menu_items, $additional_items );
+	}
+	return $sorted_menu_items;
+}, 30, 2 );

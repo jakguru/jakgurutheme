@@ -63,14 +63,24 @@ This project has the following gulp commands configured:
 │   │   ├── MicrosoftSansSerif.woff2
 │   │   └── micross.ttf
 │   ├── images
-│   │   └── index.php
+│   │   ├── controlpanel.png
+│   │   ├── index.php
+│   │   ├── keys.png
+│   │   ├── link.png
+│   │   ├── lock.png
+│   │   ├── search.png
+│   │   └── shutdown.png
 │   ├── index.php
 │   ├── js
 │   │   ├── app.min.js
 │   │   └── index.php
 │   ├── scss
+│   │   ├── _colors.scss
 │   │   ├── global.scss
-│   │   └── index.php
+│   │   ├── index.php
+│   │   ├── _startmenu.scss
+│   │   ├── _sysui.scss
+│   │   └── _taskbar.scss
 │   ├── sjs
 │   │   ├── bootstrap.js
 │   │   ├── core.js
@@ -84,7 +94,6 @@ This project has the following gulp commands configured:
 ├── index.php
 ├── LICENSE.md
 ├── package.json
-├── package-lock.json
 ├── private
 │   ├── class-additional-menu-fields-utility.php
 │   ├── class-theme-utils.php
@@ -92,6 +101,7 @@ This project has the following gulp commands configured:
 │   ├── index.php
 │   └── menu-walkers
 │       ├── class-quick-links-nav-walker.php
+│       ├── class-start-menu-nav-walker.php
 │       ├── class-sysui-notifications-area-nav-walker.php
 │       └── index.php
 ├── README.md

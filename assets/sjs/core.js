@@ -12,7 +12,7 @@ var update_clock = function() {
 var fix_start_menu_os_identifier_height = function() {
 	var height = jQuery( '#sysui-os-identifier-rotated-content-inner' )[0].scrollWidth;
 	jQuery( '#sysui-os-identifier' ).css({
-		height: ( height + 2 ),
+		'min-height': ( height + 2 ),
 	});
 	jQuery( '#sysui-os-identifier-rotated-content-inner' ).css({
 		top: ( height + 2 ),
@@ -25,6 +25,9 @@ var handle_start_button_click = function( e ) {
 		jQuery( '#start-menu' ).addClass( 'active' );
 		jQuery( '#sysui-start' ).addClass( 'active' );
 		fix_start_menu_os_identifier_height();
+	}
+	else {
+		close_start_menu();
 	}
 }
 
