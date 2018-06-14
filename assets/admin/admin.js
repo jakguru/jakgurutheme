@@ -45,6 +45,9 @@ var init_menu_image_field = function() {
 	wrapper.addClass( 'initialized' );
 }
 
+/**
+ * TODO: Replace this with a hook which is triggered every time a new menu item is added
+ */
 setInterval( function() {
 	jQuery( '.menu-image-field-wrapper' ).each( init_menu_image_field );
 }, 100 );

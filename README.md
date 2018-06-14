@@ -1,5 +1,22 @@
 # Jak Guru Theme
 
+This theme is a technology demonstrator for WordPress. It is designed to show just how flexible WordPress's API's actually are and what you can do with it. Some of the interesting functions included include:
+
+* Some Basic Security & Performance Features
+  * Removing WordPress Emojis
+  * Removing WordPress Generator Information
+* Theme Supports
+  * Title Tag
+  * Post Thumbnails
+  * Navigation Menus
+  * HTML5
+  * Custom Logo
+  * Custom Background
+  * Automatic Feed Links
+ * Adding WP Customize Controls
+ * Adding Custom Fields to the WordPress Menu Editor
+ * Custom Navigation Menu Walkers
+
 ## Dev Notes
 
 This project uses Gulp for managing CSS and JS requirements. It is setup to:
@@ -75,6 +92,7 @@ This project has the following gulp commands configured:
 │   ├── index.php
 │   └── menu-walkers
 │       ├── class-quick-links-nav-walker.php
+│       ├── class-sysui-notifications-area-nav-walker.php
 │       └── index.php
 ├── README.md
 └── style.css
