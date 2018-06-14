@@ -69,3 +69,15 @@
 				</div>
 			</div>
 		</header>
+		<nav class="sysui-panel-outer" id="start-menu">
+			<div class="sysui-panel-inner">
+				<div id="start-menu-wrapper">
+					<div id="sysui-os-identifier">
+						<span id="sysui-os-identifier-rotated-content-outer">
+							<span id="sysui-os-identifier-rotated-content-inner"><?php bloginfo( 'description', 'display' ) ?></span>
+						</span>
+					</div>
+					<div id="sysui-start-menu"></div>
+				</div>
+			</div>
+		</nav>

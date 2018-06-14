@@ -38,6 +38,9 @@ $os-identifier-gradient-start:	#a0a1f4;
 $os-identifier-gradient-end:	#000;
 $menu-highlight-color:			#021e6e;
 $notification-bg:				#fcfeec;
+$os-identifier-gradient-start:	#000000;
+$os-identifier-gradient-end: 	#2017f8;
+$os-identifier-text-color:		#fff;
 
 /**
  * Start Inline Styles
@@ -306,4 +309,58 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 #sysui-taskbar-programs-wrapper {
 	flex-grow: 1;
 	padding: 0 5px;
+}
+
+#start-menu {
+	display: none;
+	position: fixed;
+	bottom: 28px;
+	left: 2px;
+	z-index: 1090;
+}
+
+#start-menu.active {
+	display: initial;
+}
+
+#start-menu-wrapper {
+	display: flex;
+	width: 281px;
+}
+
+#start-menu-wrapper > * {
+	display: inline-block;
+}
+
+#sysui-os-identifier {
+	width: 35px;
+	vertical-align: bottom;
+	background: $os-identifier-gradient-start;
+	background: -moz-linear-gradient(top, $os-identifier-gradient-start 0%, $os-identifier-gradient-end 100%);
+	background: -webkit-linear-gradient(top, $os-identifier-gradient-start 0%,$os-identifier-gradient-end 100%);
+	background: linear-gradient(to bottom, $os-identifier-gradient-start 0%,$os-identifier-gradient-end 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$os-identifier-gradient-start, endColorstr=$os-identifier-gradient-end,GradientType=0 );
+	overflow: hidden;
+}
+
+#sysui-os-identifier-rotated-content-outer {
+	width: 35px;
+	overflow: hidden;
+}
+
+#sysui-os-identifier-rotated-content-inner {
+	position: relative;
+	display: block;
+	font-size: 30px;
+	line-height: 35px;
+	white-space: nowrap;
+	color: $os-identifier-text-color;
+	font-weight: 900;
+	letter-spacing: -1px;
+	padding: 0 2px;
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	transform-origin: top left;
 }

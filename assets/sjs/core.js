@@ -5,9 +5,51 @@ jQuery( '.custom-logo-link' ).on( 'click', function( e ) {
 	e.preventDefault();
 });
 
-var updateClock = function() {
+var update_clock = function() {
 	jQuery( '.sysui-clock' ).text( moment().utc().format( app.moment.timeformat ) );
 }
 
-updateClock();
-setInterval( updateClock, 1000 );
+var fix_start_menu_os_identifier_height = function() {
+	var height = jQuery( '#sysui-os-identifier-rotated-content-inner' )[0].scrollWidth;
+	jQuery( '#sysui-os-identifier' ).css({
+		height: ( height + 2 ),
+	});
+	jQuery( '#sysui-os-identifier-rotated-content-inner' ).css({
+		top: ( height + 2 ),
+	});
+}
+
+var handle_start_button_click = function( e ) {
+	e.preventDefault();
+	if ( ! jQuery( '#start-menu' ).is(':visible') ) {
+		jQuery( '#start-menu' ).addClass( 'active' );
+		jQuery( '#sysui-start' ).addClass( 'active' );
+		fix_start_menu_os_identifier_height();
+	}
+}
+
+var close_start_menu = function() {
+	jQuery( '#start-menu' ).removeClass( 'active' );
+	jQuery( '#sysui-start' ).removeClass( 'active' );
+}
+
+var handle_desktop_click = function( e ) {
+	if ( jQuery( '#start-menu' ).is(':visible') ) {
+		var startmenu = jQuery( '#start-menu' ),
+			startbutton = jQuery( '#sysui-start' ),
+			tgt = e.target;
+		if (
+			! startbutton.is( tgt )
+			&& ! startmenu.is( tgt )
+			&& startmenu.has( tgt ).length === 0
+		) {
+			close_start_menu();
+		}
+	}
+}
+
+update_clock();
+setInterval( update_clock, 1000 );
+fix_start_menu_os_identifier_height();
+jQuery( '#sysui-start' ).on( 'click', handle_start_button_click );
+jQuery( document ).on( 'mouseup', handle_desktop_click );
