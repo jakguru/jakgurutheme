@@ -181,16 +181,19 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 }
 
 #sysui-taskbar-outer {
-	display: table;
-	table-layout: auto;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: no-wrap;
+	align-content: flex-start;
 	width: 100%;
 }
 
 #sysui-taskbar-outer > * {
-	display: table-cell;
+	display: block;
 	vertical-align: top;
 	white-space:nowrap;
 	clear: both;
+	width:auto;
 }
 
 #sysui-start {
@@ -253,4 +256,8 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	font-size: 10px;
 	position: relative;
 	top: 2px;
+}
+
+#sysui-taskbar-programs-wrapper {
+	flex-grow: 1;
 }
