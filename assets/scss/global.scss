@@ -37,6 +37,7 @@ $title-active-text-color:		#fff;
 $os-identifier-gradient-start:	#a0a1f4;
 $os-identifier-gradient-end:	#000;
 $menu-highlight-color:			#021e6e;
+$notification-bg:				#fcfeec;
 
 /**
  * Start Inline Styles
@@ -161,11 +162,13 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	display: inline-block;
 }
 
-.sysui-quick-links {
+.sysui-quick-links,
+.sysui-notifications-links {
 	display: table;
 }
 
-.sysui-quick-links > a {
+.sysui-quick-links > a,
+.sysui-notifications-links > a {
 	display: table-cell;
 	cursor: pointer;
 }
@@ -175,9 +178,50 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	padding: 4px;
 }
 
-.sysui-quick-links > a > span > img {
+.sysui-notifications-links > a > span {
+	display: inline-block;
+	padding: 2px;
+}
+
+.sysui-quick-links > a > span > img,
+.sysui-notifications-links > a > span > img {
 	width: 16px;
 	height: 16px;
+}
+
+.popover-header,
+.popover-header:active,
+.popover-header:focus,
+.popover-header:hover,
+.popover-body,
+.popover-body:hover,
+.popover-body:focus,
+.popover-body:active {
+	line-height: 16px;
+}
+
+.popover {
+	padding: .5rem 0;
+}
+
+.popover,
+.popover-header {
+	background-color: $notification-bg;
+	font-size: 12px;
+}
+
+.bs-popover-auto[x-placement^=top] .arrow::after, .bs-popover-top .arrow::after {
+	border-top-color: $notification-bg;
+}
+
+.popover-header {
+	border-bottom: none;
+	font-weight: bold;
+	padding: 0 .75rem;
+}
+
+.popover-body {
+	padding: 0 .75rem;
 }
 
 #sysui-taskbar-outer {
@@ -244,20 +288,22 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	display: table;
 	height: 22px;
 	float: right;
-	padding: 0 16px 0 3px;
 }
 
 #sysui-notifications > * {
 	display: table-cell;
 	vertical-align: middle;
+	padding: 0 0 0 4px;
 }
 
 #sysui-notifications-clock {
 	font-size: 10px;
 	position: relative;
 	top: 2px;
+	padding: 0 16px;
 }
 
 #sysui-taskbar-programs-wrapper {
 	flex-grow: 1;
+	padding: 0 5px;
 }

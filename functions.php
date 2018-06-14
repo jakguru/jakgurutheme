@@ -20,6 +20,7 @@ $private_files_to_be_loaded = array(
 	'class-wp-customize-utility.php',
 	'class-additional-menu-fields-utility.php',
 	'menu-walkers/class-quick-links-nav-walker.php',
+	'menu-walkers/class-sysui-notifications-area-nav-walker.php',
 );
 
 foreach ( $private_files_to_be_loaded as $filename ) {

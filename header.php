@@ -55,6 +55,14 @@
 					<div id="sysui-taskbar-programs-wrapper"></div>
 					<div id="sysui-taskbar-notifications-wrapper">
 						<div id="sysui-notifications">
+							<?php wp_nav_menu( array(
+								'theme_location' => 'notification_area',
+								'container' => false,
+								'menu_class' => 'sysui-notifications-links',
+								'depth' => 1,
+								'items_wrap' => '<nav id="%1$s" class="%2$s">%3$s</nav>',
+								'walker' => new Sysui_Notifications_Area_Nav_Walker(),
+							) ); ?>
 							<div id="sysui-notifications-clock" class="sysui-clock"></div>
 						</div>
 					</div>
