@@ -29,7 +29,7 @@
 
 .sysui-start-menu-item {
 	display: table;
-	min-width: 200px;
+	min-width: 150px;
 }
 
 .sysui-start-menu-item > * {
@@ -182,4 +182,19 @@
 	background: $menu-highlight-color;
 	background-color: $menu-highlight-color;
 	color: $menu-highlight-text-color;
+}
+
+@media ( max-width: map-get($grid-breakpoints, "sm") ) {
+	.sysui-start-menu-child-menu {
+		left: 10vw;
+	}
+
+	.sysui-start-menu-item-icon-wrapper {
+		width: 25px;
+		height: 25px;
+	}
+
+	* > .sysui-start-menu-item-label {
+		line-height: 25px;
+	}
 }
