@@ -162,6 +162,10 @@
 	position: relative;
 }
 
+#sysui-start-content {
+	line-height: 16px;
+}
+
 .sysui-start-menu-item.menu-item-has-children:after {
 	content: '▸';
 	color: $text-color;

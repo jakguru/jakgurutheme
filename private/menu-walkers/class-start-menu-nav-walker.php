@@ -130,10 +130,10 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 			$current = home_url();
 		}
 		$items = array();
-		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/shutdown.png', '', array( 'seperator' ) ) );
+		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/link.png', '', array( 'seperator' ) ) );
 		array_push( $items, self::make_start_menu_item( admin_url(), __( 'Control Panel' ), 'images/controlpanel.png', '' ) );
 		array_push( $items, self::make_start_menu_item( '#', __( 'Search' ), 'images/search.png', '', array( 'sysui-activate-seach' ) ) );
-		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/shutdown.png', '', array( 'seperator' ) ) );
+		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/link.png', '', array( 'seperator' ) ) );
 		if ( is_user_logged_in() ) {
 			array_push( $items, self::make_start_menu_item( admin_url( 'profile.php' ), __( 'My Profile' ), get_avatar_url( wp_get_current_user(), array( 'size' => 35, 'default' => 'mm', 'rating' => 'g' ) ) ) );
 			array_push( $items, self::make_start_menu_item( wp_logout_url( $current ), __( 'Log Out' ), 'images/shutdown.png' ) );
@@ -173,21 +173,10 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 
 		}
 		$sorted_menu_items = $menu_items_with_children = array();
-		foreach ( (array) $menu_items as $menu_item ) {
-			$sorted_menu_items[ $menu_item->menu_order ] = $menu_item;
-			if ( $menu_item->menu_item_parent ) {
-				$menu_items_with_children[ $menu_item->menu_item_parent ] = true;
-			}
-		}
-		if ( $menu_items_with_children ) {
-			foreach ( $sorted_menu_items as &$menu_item ) {
-				if ( isset( $menu_items_with_children[ $menu_item->ID ] ) ) {
-					$menu_item->classes[] = 'menu-item-has-children';
-				}
-			}
-		}
 		unset( $menu_items, $menu_item );
 		$sorted_menu_items = apply_filters( 'wp_nav_menu_objects', $sorted_menu_items, $args );
+		array_shift( $sorted_menu_items );
+
 		$items .= walk_nav_menu_tree( $sorted_menu_items, $args->depth, $args );
 		unset($sorted_menu_items);
 		if ( ! empty( $args->menu_id ) ) {
