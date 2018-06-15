@@ -26,6 +26,8 @@ This project uses Gulp for managing CSS and JS requirements. It is setup to:
 
 To generate the file tree listed below, use `tree -I '.sass-cache|node_modules'` from the root of the project
 
+*NOTE* This project requires `gulp-ruby-sass`, which requires the Ruby version of SASS.
+
 ### Setting Up Dev Environment
 
 This setup assumes that you have the latest versions of nodejs and npm installed on your computer.

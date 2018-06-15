@@ -58,7 +58,8 @@ Temporary Items
 # sftp configuration file
 sftp-config.json
 
-# sass
+# other
 .sass-cache
 /vendor/
 /node_modules/
+.package-lock.json
