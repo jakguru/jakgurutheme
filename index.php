@@ -47,6 +47,9 @@ get_header();
 			</div>
 		</div>
 		<div class="sysui-panel-window-content"></div>
+		<div class="sysui-window-right-side"></div>
+		<div class="sysui-window-bottom-side"></div>
+		<div class="sysui-window-resize-control"></div>
 	</div>
 </div>
 <div id="test-window-2" class="sysui-panel-outer sysui-window focused" style="top: 360px; left: 30px;">
@@ -93,6 +96,9 @@ get_header();
 			</div>
 		</div>
 		<div class="sysui-panel-window-content"></div>
+		<div class="sysui-window-right-side"></div>
+		<div class="sysui-window-bottom-side"></div>
+		<div class="sysui-window-resize-control"></div>
 	</div>
 </div>
 <?php
