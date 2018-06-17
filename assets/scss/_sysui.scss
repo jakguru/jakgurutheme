@@ -73,6 +73,10 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	height: 100%;
 }
 
+.sysui-button-inner > * {
+	position: relative;
+}
+
 .sysui-button-outer:focus,
 .sysui-button-outer:active,
 .sysui-button-outer.active {
@@ -89,4 +93,11 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	border-left-color: $border-inner-dark;
 	border-right-color: $border-outer-light;
 	border-bottom-color: $border-outer-light;
+}
+
+.sysui-button-outer:focus > .sysui-button-inner > *,
+.sysui-button-outer:active > .sysui-button-inner > *,
+.sysui-button-outer.active > .sysui-button-inner > * {
+	top: 1px;
+	left: 1px;
 }

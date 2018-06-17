@@ -27,9 +27,9 @@
 								<div id="sysui-start-content"><?php bloginfo( 'name', 'display' ); ?></div>
 							</div>
 						</button>
-						<div class="start-panel-seperator-wrapper">
-							<div class="start-panel-seperator-relic"></div>
-						</div>
+					</div>
+					<div class="start-panel-seperator-wrapper">
+						<div class="start-panel-seperator-relic"></div>
 					</div>
 					<?php
 					if ( true == get_theme_mod( 'enable_quicklaunch', true ) && has_nav_menu('quick_links') ) {
@@ -45,9 +45,9 @@
 							'walker' => new Quick_Links_Nav_Walker(),
 						) ); ?>
 						</div>
-						<div class="start-panel-seperator-wrapper d-none d-sm-inline-block">
-							<div class="start-panel-seperator-relic"></div>
-						</div>
+					</div>
+					<div class="start-panel-seperator-wrapper d-none d-sm-inline-block">
+						<div class="start-panel-seperator-relic"></div>
 					</div>
 					<?php
 					}

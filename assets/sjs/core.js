@@ -1,6 +1,15 @@
 @import "../../node_modules/sprintf-js/src/sprintf.js";
 @import "../../node_modules/moment/min/moment-with-locales.js";
 
+jQuery( document ).ready(function() {
+	document.oncontextmenu = function( e ) {
+		jQuery( document ).trigger( 'rightclick', e );
+		jQuery( window ).trigger( 'rightclick', e );
+		jQuery( e.target ).trigger( 'rightclick', e );
+		//return false;
+	};
+});
+
 jQuery( '.custom-logo-link' ).on( 'click', function( e ) {
 	e.preventDefault();
 });
@@ -65,3 +74,11 @@ fix_start_menu_os_identifier_height();
 jQuery( '#sysui-start' ).on( 'click', handle_start_button_click );
 jQuery( document ).on( 'mouseup', handle_desktop_click );
 jQuery( 'a' ).on( 'click', handle_link_click );
+jQuery( '.sysui-activate-seach' ).on( 'click', function( e ) {
+	e.preventDefault();
+	app.defaultwindows.search.onOpen = function( obj ) {
+		jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
+	}
+	new sysuiwindow( app.defaultwindows.search );
+	close_start_menu();
+});

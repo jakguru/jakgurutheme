@@ -91,6 +91,29 @@ function get_application_script_localizations() {
         	'maximize' => __( 'Maximize' ),
         	'close' => __( 'Close' ),
         ),
+        'defaultwindows' => array(
+        	'search' => array(
+        		'icon' => Theme_Utils::asset_path( 'images/search.png' ),
+        		'title' => __( 'Search' ),
+        		'minimize' => true,
+        		'maximize' => true,
+        		'close' => true,
+        		'menus' => array(
+        			array(
+        				'title' => __( 'File' ),
+        				'items' => array(
+        					array(
+        						'title' => __( 'Close' ),
+        						'href' => '#',
+        						'class' => 'sysui-close-window',
+        					),
+        				),
+        			),
+        		),
+        		'content' => '<p>Your Search Content Goes Here</p>',
+        		'maximized' => true,
+        	),
+        ),
 	);
 }
 

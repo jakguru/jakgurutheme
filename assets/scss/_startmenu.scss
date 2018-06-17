@@ -1,32 +1,3 @@
-.start-panel-seperator-wrapper {
-	overflow: visible;
-	width: 0px;
-	border-left: solid 1px $border-inner-dark;
-	border-right: solid 1px $border-inner-light;
-	height: 22px;
-	position: relative;
-	margin-right: 5px;
-	margin-left: 4px;
-	display: inline-block;
-	float: left;
-}
-
-.start-panel-seperator-wrapper > .start-panel-seperator-relic {
-	width: 3px;
-	background: $panel-bg;
-	background-color: $panel-bg;
-	border: solid 1px;
-	border-top-color: $border-inner-light;
-	border-left-color: $border-inner-light;
-	border-bottom-color: $border-inner-dark;
-	border-right-color: $border-inner-dark;
-	height: 18px;
-	position: relative;
-	top: 2px;
-	left: 2px;
-	display: inline-block;
-}
-
 .sysui-start-menu-item {
 	display: table;
 	min-width: 150px;

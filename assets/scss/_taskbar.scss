@@ -1,3 +1,31 @@
+.start-panel-seperator-wrapper {
+	overflow: visible;
+	border-left: solid 1px $border-inner-dark;
+	border-right: solid 1px $border-inner-light;
+	height: 22px;
+	position: relative;
+	margin-right: 0;
+	margin-left: 5px;
+	display: inline-block;
+	width: 0px;
+}
+
+.start-panel-seperator-wrapper > .start-panel-seperator-relic {
+	width: 3px;
+	background: $panel-bg;
+	background-color: $panel-bg;
+	border: solid 1px;
+	border-top-color: $border-inner-light;
+	border-left-color: $border-inner-light;
+	border-bottom-color: $border-inner-dark;
+	border-right-color: $border-inner-dark;
+	height: 18px;
+	position: relative;
+	top: 2px;
+	left: 2px;
+	display: inline-block;
+}
+
 .sysui-quick-links,
 .sysui-notifications-links {
 	display: table;
@@ -58,6 +86,40 @@
 
 .popover-body {
 	padding: 0 .75rem;
+}
+
+.sysui-taskbar-program {
+	display: inline-block;
+	margin-right: 3px;
+	width: 156px;
+	min-height: 22px;
+	overflow: hidden;
+	cursor: default;
+}
+
+.sysui-taskbar-program > * {
+	display: flex;
+	overflow: hidden;
+	padding: 0 2px;
+	cursor: default;
+}
+
+.sysui-taskbar-program-icon > img {
+	width: 18px;
+	height: 18px;
+	line-height: 18px;
+	padding: 2px 2px 2px 0;
+	margin-right: 3px;
+}
+
+.sysui-taskbar-program-title {
+	flex-grow: 1;
+	line-height: 18px;
+	font-size: 12px;
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+	cursor: normal;
 }
 
 #sysui-taskbar-outer {
@@ -139,7 +201,17 @@
 	padding: 0 16px;
 }
 
+#sysui-taskbar-quick-launch-wrapper {
+	padding: 0 2px;
+}
+
 #sysui-taskbar-programs-wrapper {
+	display: flex;
+	flex-wrap: wrap;
 	flex-grow: 1;
 	padding: 0 5px;
+	white-space: normal;
+	height: 24px;
+	line-height: 24px;
+	overflow-y: auto;
 }

@@ -71,6 +71,7 @@ var sysuiwindow = function( args ) {
 		left: 0,
 	}
 	var windowTemplate = '<div id="%s" class="sysui-panel-outer sysui-window sysui-window-loading"><div class="sysui-panel-inner"><div class="sysui-window-titlebar"><span class="sysui-window-titlebar-icon"><img src="%s" /></span><span class="sysui-window-titlebar-title">%s</span></div><div class="sysui-window-menubar-wrapper"></div><div class="sysui-panel-window-content">%s</div><div class="sysui-window-right-side"></div><div class="sysui-window-bottom-side"></div><div class="sysui-window-resize-control"></div></div></div>';
+	var taskbarButtonTemplate = '<div class="sysui-button-outer sysui-taskbar-program" for="%s"><div class="sysui-button-inner"><span class="sysui-taskbar-program-icon"><img src="%s" /></span><span class="sysui-taskbar-program-title">%s</span></div></div>';
 	var properties = {
 		icon: asset_path( 'images/defaultapp.png' ),
 		title: 'A System Window',
@@ -89,6 +90,7 @@ var sysuiwindow = function( args ) {
 		autoopen: true,
 		width: 500,
 		height: 300,
+		maximized: false,
 	}
 	for ( var arg in properties ) {
 		if ( 'object' == typeof( args ) && typeof( args[ arg ] ) == typeof( properties[ arg ] ) ) {
@@ -252,14 +254,24 @@ var sysuiwindow = function( args ) {
 				bottommouseoffset.top = e.pageY;
 			}
 		});
-		/**
-		 * TODO: Add to Application Bar
-		 */
+		var taskbarbuttonhtml = sprintf( taskbarButtonTemplate, obj.id, properties.icon, properties.title );
+		var taskbarbutton = jQuery( taskbarbuttonhtml );
+		jQuery( '#sysui-taskbar-programs-wrapper' ).append( taskbarbutton );
+		taskbarbutton.on( 'click', obj.focus );
+		taskbarbutton.on( 'rightclick', obj.focus );
+		if ( true == properties.maximized ) {
+			obj.maximize();	
+		}
+		properties.onOpen( obj );
 		obj.focus();
 	}
 	this.focus = function() {
 		var sw = jQuery( '#' + obj.id );
-		jQuery( '.sysui-window' ).removeClass( 'focused' );
+		jQuery( '.sysui-window' ).each( function() {
+			var w = jQuery( this );
+			w.removeClass( 'focused' );
+			jQuery( '#sysui-taskbar-programs-wrapper' ).find( '[for="' + w.attr( 'id' ) + '"]').removeClass( 'active' );	
+		});
 		sw.addClass( 'focused' );
 		var zi = get_z_index();
 		if ( zi >= 1079 ) {
@@ -276,14 +288,20 @@ var sysuiwindow = function( args ) {
 		sw.css({
 			'z-index': zi,
 		});
+		jQuery( '#sysui-taskbar-programs-wrapper' ).find( '[for="' + obj.id + '"]').addClass( 'active' );
+		if ( ! sw.is( ':visible' ) ) {
+			obj.restore();
+		}
 	}
 	this.blur = function() {
 		var sw = jQuery( '#' + obj.id );
 		sw.removeClass( 'focused' );
+		jQuery( '#sysui-taskbar-programs-wrapper' ).find( '[for="' + obj.id + '"]').removeClass( 'active' );
 	}
 	this.close = function() {
 		jQuery( '#' + obj.id ).remove();
-		jQuery( '[for="#' + obj.id + '"]' ).remove();
+		jQuery( '#sysui-taskbar-programs-wrapper' ).find( '[for="' + obj.id + '"]').remove();
+		properties.onClose();
 	}
 	this.maximize = function() {
 		jQuery( '#' + obj.id ).attr( 'original-top', jQuery( '#' + obj.id ).css( 'top' ) );
