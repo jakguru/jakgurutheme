@@ -91,6 +91,8 @@ var sysuiwindow = function( args ) {
 		width: 500,
 		height: 300,
 		maximized: false,
+		page_id: 0,
+		permalink: '',
 	}
 	for ( var arg in properties ) {
 		if ( 'object' == typeof( args ) && typeof( args[ arg ] ) == typeof( properties[ arg ] ) ) {

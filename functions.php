@@ -19,6 +19,8 @@ $private_files_to_be_loaded = array(
 	'class-theme-utils.php',
 	'class-wp-customize-utility.php',
 	'class-additional-menu-fields-utility.php',
+	'class-page-parser.php',
+	'class-custom-comment-walker.php',
 	'menu-walkers/class-quick-links-nav-walker.php',
 	'menu-walkers/class-sysui-notifications-area-nav-walker.php',
 	'menu-walkers/class-start-menu-nav-walker.php',
@@ -80,7 +82,9 @@ add_action( 'init', function() {
 
 function get_application_script_localizations() {
 	return array(
+		'site_path' => get_bloginfo( 'url' ),
 		'asset_path' => sprintf( '%s/assets/', JGT_MUTHEME_PATH ),
+		'ajax_url' => admin_url( 'admin-ajax.php' ),
 		'moment' => array(
 			'datetimeformat' => Theme_Utils::phpDateFormatToMomentFormat( sprintf( '%s %s', get_option('date_format'), get_option('time_format') ) ),
 			'dateformat' => Theme_Utils::phpDateFormatToMomentFormat( get_option('date_format') ),
@@ -110,7 +114,7 @@ function get_application_script_localizations() {
         				),
         			),
         		),
-        		'content' => '<p>Your Search Content Goes Here</p>',
+        		'content' => '<p>Eventually the search window will be here</p>',
         		'maximized' => true,
         	),
         ),
@@ -205,3 +209,13 @@ add_filter( 'wp_nav_menu_objects', function( $sorted_menu_items, $args ) {
 	}
 	return $sorted_menu_items;
 }, 30, 2 );
+
+/** Add Handler for Front-End AJAX Requests */
+add_action( 'wp_ajax_page_request', array( 'Page_Parser', 'parse' ) );
+add_action( 'wp_ajax_nopriv_page_request', array( 'Page_Parser', 'parse' ) );
+
+/** Change the Reply To Link */
+add_filter( 'comment_reply_link', function( $link, $args = array(), $comment = null, $post = null ) {
+	$link = print_r( $args, true );
+	return $link;
+});

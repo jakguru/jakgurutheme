@@ -62,10 +62,49 @@ var handle_desktop_click = function( e ) {
 
 var handle_link_click = function( e ) {
 	var link = jQuery( this );
-	if ( 'undefined' !== typeof( link.attr( 'href' ) ) && '#' !== link.attr( 'href' ) ) {
+	var wploginpath = sprintf( '%s/wp-login.php',app.site_path ),
+		wpadminpath = sprintf( '%s/wp-admin/',app.site_path )
+	if (
+		'undefined' !== typeof( link.attr( 'href' ) )
+		&& '#' !== link.attr( 'href' )
+		&& link.attr( 'href' ).startsWith( app.site_path )
+		&& ! link.attr( 'href' ).startsWith( wploginpath )
+		&& ! link.attr( 'href' ).startsWith( wpadminpath )
+	) {
 		e.preventDefault();
-		console.log( 'Link clicked for URL:' + link.attr( 'href' ) );
+		if ( link.attr( 'href' ) == app.site_path + '/' ) {
+			jQuery( '.sysui-minimize-window' ).each( function() {
+				jQuery( this ).click();
+			});
+		}
+		else {
+			var query = link.attr( 'href' ).substring( app.site_path.length );
+			open_page_by_query( query );
+		}
 	}
+}
+
+var open_page_by_query = function( query ) {
+	jQuery.ajax({
+		async: true,
+		cache: false,
+		crossDomain: false,
+		data: {
+			action: 'page_request',
+			query: query,
+		},
+		success: function( data, textStatus, jqXHR ) {
+			if ( true == data.success ) {
+				new sysuiwindow( data.data );
+			}
+			else {
+				console.log( data );
+			}
+			close_start_menu();
+		},
+		method: 'POST',
+		url: app.ajax_url,
+	});
 }
 
 update_clock();

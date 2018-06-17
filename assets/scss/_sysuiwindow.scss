@@ -209,6 +209,8 @@
 .sysui-window-menu-dropdown-item {
 	background: $panel-bg;
 	background-color: $panel-bg;
+	white-space: nowrap;
+	display: block;
 }
 
 .sysui-panel-inner > .sysui-window-menu-dropdown-item:first-child {
@@ -217,4 +219,49 @@
 
 .sysui-panel-inner > .sysui-window-menu-dropdown-item:last-child {
 	border-bottom: solid 1px $border-inner-dark;
+}
+
+.sysui-text-content {
+	padding: 10px;
+	background: $sysui-window-text-background;
+	background-color: $sysui-window-text-background;
+	min-height: 100%;
+}
+
+.sysui-text-content p {
+	margin-bottom: 10px;
+}
+
+.comment-item {
+	display: block;
+	clear: both;
+}
+
+.comment-item-avatar {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	position: relative;
+	top: -2px;
+}
+
+.comment-title {
+	display: inline-block;
+	width: calc( 100% - 33px );
+	white-space: nowrap;
+	padding: 0 5px;
+}
+
+.comment-item > .comment-list {
+	padding-left: 12px;
+}
+
+.comment-body {
+	display: block;
+	width: 100%;
+	padding: 5px;
+}
+
+.comment-reply-link {
+	margin-bottom: 10px;
 }

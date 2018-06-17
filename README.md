@@ -119,6 +119,8 @@ This project has the following gulp commands configured:
 ├── package.json
 ├── private
 │   ├── class-additional-menu-fields-utility.php
+│   ├── class-custom-comment-walker.php
+│   ├── class-page-parser.php
 │   ├── class-theme-utils.php
 │   ├── class-wp-customize-utility.php
 │   ├── index.php
