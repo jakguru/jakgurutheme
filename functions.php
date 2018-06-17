@@ -77,29 +77,32 @@ add_action( 'init', function() {
 });
 
 /** Add the application stylesheet and scripts */
-add_action('wp_enqueue_scripts', function () {
-	call_user_func_array( 'wp_enqueue_style', Theme_Utils::get_wp_enqueue_style_args( 'css/app.min.css' ) );
-	call_user_func_array( 'wp_enqueue_script', Theme_Utils::get_wp_enqueue_script_args( 'js/app.min.js', array( 'jquery' ) ) );
-	wp_localize_script( 'js/app.min.js', 'app', array(
+
+function get_application_script_localizations() {
+	return array(
 		'asset_path' => sprintf( '%s/assets/', JGT_MUTHEME_PATH ),
 		'moment' => array(
 			'datetimeformat' => Theme_Utils::phpDateFormatToMomentFormat( sprintf( '%s %s', get_option('date_format'), get_option('time_format') ) ),
 			'dateformat' => Theme_Utils::phpDateFormatToMomentFormat( get_option('date_format') ),
 			'timeformat' => Theme_Utils::phpDateFormatToMomentFormat( get_option('time_format') ),
         ),
-	) );
+        'terms' => array(
+        	'minimize' => __( 'Minimize' ),
+        	'maximize' => __( 'Maximize' ),
+        	'close' => __( 'Close' ),
+        ),
+	);
+}
+
+add_action('wp_enqueue_scripts', function () {
+	call_user_func_array( 'wp_enqueue_style', Theme_Utils::get_wp_enqueue_style_args( 'css/app.min.css' ) );
+	call_user_func_array( 'wp_enqueue_script', Theme_Utils::get_wp_enqueue_script_args( 'js/app.min.js', array( 'jquery' ) ) );
+	wp_localize_script( 'js/app.min.js', 'app', get_application_script_localizations() );
 });
 
 add_action('customize_preview_init', function () {
 	call_user_func_array( 'wp_enqueue_script', Theme_Utils::get_wp_enqueue_script_args( 'js/app.min.js', array( 'jquery' ) ) );
-	wp_localize_script( 'js/app.min.js', 'app', array(
-		'asset_path' => sprintf( '%s/assets/', JGT_MUTHEME_PATH ),
-		'moment' => array(
-			'datetimeformat' => Theme_Utils::phpDateFormatToMomentFormat( sprintf( '%s %s', get_option('date_format'), get_option('time_format') ) ),
-			'dateformat' => Theme_Utils::phpDateFormatToMomentFormat( get_option('date_format') ),
-			'timeformat' => Theme_Utils::phpDateFormatToMomentFormat( get_option('time_format') ),
-        ),
-	) );
+	wp_localize_script( 'js/app.min.js', 'app', get_application_script_localizations() );
 });
 
 /** Add the admin stylesheet and scripts */

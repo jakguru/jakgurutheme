@@ -24,7 +24,7 @@ This project uses Gulp for managing CSS and JS requirements. It is setup to:
 * Automatically convert `.sass` and `.scss` files found under `./assets/scss/` into minified `css` files
 * Automatically minify `.js` files found under `./assets/sjs` into minified `js` files
 
-To generate the file tree listed below, use `tree -I '.sass-cache|node_modules'` from the root of the project
+To generate the file tree listed below, use `tree -I '.sass-cache|node_modules|package-lock.json'` from the root of the project
 
 *NOTE* This project requires `gulp-ruby-sass`, which requires the Ruby version of SASS.
 
@@ -84,6 +84,7 @@ This project has the following gulp commands configured:
 │   │   ├── notepad.png
 │   │   ├── openfolder.png
 │   │   ├── programs.png
+│   │   ├── restore.png
 │   │   ├── search.png
 │   │   ├── shutdown.png
 │   │   ├── stop.png

@@ -2,6 +2,10 @@
 	position: absolute;
 }
 
+.sysui-window-loading {
+	display: none;
+}
+
 .sysui-window,
 .sysui-window > * {
 	max-width: 100vw;
@@ -43,6 +47,8 @@
 	line-height: 18px;
 	padding: 0 2px;
 	flex-grow: 1;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .sysui-window:focus .sysui-window-titlebar .sysui-window-titlebar-title,
@@ -107,6 +113,7 @@
 .sysui-window-menu-dropdown {
 	position: absolute;
 	top: calc( 100% - 2px );
+	left: -2px;
 	display: none;
 }
 
@@ -189,4 +196,25 @@
 	width: 10px;
 	height: 10px;
 	cursor: nwse-resize;
+}
+
+.sysui-panel-window-content *,
+.sysui-panel-window-content *:active,
+.sysui-panel-window-content *:focus,
+.sysui-panel-window-content *:hover {
+	font-size: 12px;
+	line-height: 12px;
+}
+
+.sysui-window-menu-dropdown-item {
+	background: $panel-bg;
+	background-color: $panel-bg;
+}
+
+.sysui-panel-inner > .sysui-window-menu-dropdown-item:first-child {
+	border-top: solid 1px $border-inner-light;
+}
+
+.sysui-panel-inner > .sysui-window-menu-dropdown-item:last-child {
+	border-bottom: solid 1px $border-inner-dark;
 }
