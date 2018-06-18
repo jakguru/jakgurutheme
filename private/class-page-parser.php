@@ -41,7 +41,7 @@ class Page_Parser
 		$this->query_vars = array();
 		$post_type_query_vars = array();
 		$rewrite = $wp_rewrite->wp_rewrite_rules();
-		if ( ! empty( $rewrite ) ) {
+		if ( ! empty( $rewrite ) && '/?p=' !== substr( $query, 0, 4 ) ) {
 			$requested_file = trim( $query, '/' );
 			$request_match = trim( $query, '/' );
 			if ( empty( $request_match ) ) {
@@ -135,6 +135,9 @@ class Page_Parser
 			$this->query_vars['error'] = $error;
 
 		$this->query_vars['posts_per_page'] = get_option( 'posts_per_page', 10 );
+		if ( ! isset( $this->query_vars['preview'] ) || 'true' !== $this->query_vars['preview'] ) {
+			$this->query_vars['post_status'] = 'publish';
+		}
 		$this->wpo = new WP_Query( $this->query_vars );
 		if ( isset( $is_archive ) && true == $is_archive ) {
 			$this->wpo->is_archive = true;
@@ -146,8 +149,6 @@ class Page_Parser
 			$this->wpo->is_archive = true;
 		}
 		$this->wpo->is_admin = false;
-		//$this->make_error_window( 'Debug', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>', true );
-		//return;
 		switch ( true ) {
 			case $this->wpo->is_404:
 				$this->make_error_window( 'Item not Found', 'Sorry, but the item you have requested could not be found' );
@@ -195,7 +196,7 @@ class Page_Parser
 				//$this->window_properties['content'] .= sprintf( '<div class="sysui-text-content">%s</div>', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>' );
 				break;
 
-			case $this->wpo->is_single || $this->wpo->is_page:
+			case ( $this->wpo->is_single || $this->wpo->is_page ) && is_a( $this->wpo->post, 'WP_Post' ):
 				$post = $this->wpo->post;
 				if ( ! empty( $post->post_password ) && $post->post_password !== $password ) {
 					$this->make_password_request_window();
@@ -252,6 +253,7 @@ class Page_Parser
 			
 			default:
 				//$this->make_error_window( 'Debug', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>', true );
+				//return;
 				$this->make_error_window( 'Item not Found', 'Sorry, but the item you have requested could not be found' );
 				break;
 		}
