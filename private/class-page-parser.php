@@ -19,7 +19,7 @@ class Page_Parser
 		'autoopen' => true,
 		'maximized' => false,
 		'page_id' => 0,
-		'permalink' => '',
+		'permalink' => '/',
 	);
 	private $error = '404';
 	private $query_vars = array();
@@ -32,6 +32,7 @@ class Page_Parser
 
 	public function __construct( $query, $password = '' )
 	{
+		$this->window_properties['permalink'] = home_url() . '/';
 		global $wp_rewrite;
 		$this->original_query = $query;
 		if ( ! apply_filters( 'do_parse_request', true, $this, $extra_query_vars ) ) {
@@ -121,14 +122,77 @@ class Page_Parser
 			}
 		}
 		$this->query_vars = wp_resolve_numeric_slug_conflicts( $this->query_vars );
-
+		if ( 0 == count( $this->query_vars ) ) {
+			if ( 'page' == get_option( 'show_on_front' ) ) {
+				$this->query_vars['page_id'] = get_option( 'page_on_front' );
+			}
+			else {
+				$is_archive = true;
+				$is_home = true;
+			}
+		}
 		if ( isset($error) )
 			$this->query_vars['error'] = $error;
 
+		$this->query_vars['posts_per_page'] = get_option( 'posts_per_page', 10 );
 		$this->wpo = new WP_Query( $this->query_vars );
+		if ( isset( $is_archive ) && true == $is_archive ) {
+			$this->wpo->is_archive = true;
+		}
+		if ( isset( $is_home ) && true == $is_home ) {
+			$this->wpo->is_home = true;
+		}
+		if ( $this->wpo->is_paged ) {
+			$this->wpo->is_archive = true;
+		}
+		$this->wpo->is_admin = false;
+		//$this->make_error_window( 'Debug', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>', true );
+		//return;
 		switch ( true ) {
 			case $this->wpo->is_404:
 				$this->make_error_window( 'Item not Found', 'Sorry, but the item you have requested could not be found' );
+				$this->window_properties['permalink'] = self::get_the_permalink( $this->wpo );
+				break;
+
+			case $this->wpo->is_archive || $this->wpo->is_search:
+				$this->window_properties['icon'] = Theme_Utils::asset_path( 'images/folder.png' );
+				$this->window_properties['title'] = esc_html( apply_filters( 'the_title', self::make_title_from_wp_query( $this->wpo ) ) );
+				$this->window_properties['width'] = 500;
+				$this->window_properties['height'] = 300;
+				$this->window_properties['menus'] = array(
+					array(
+						'title' => __( 'File' ),
+						'items' => array(
+							array(
+								'title' => __( 'Close' ),
+								'href' => '#',
+								'class' => 'sysui-close-window',
+							),
+						),
+					),
+				);
+				$this->window_properties['permalink'] = self::get_the_permalink( $this->wpo );
+				$this->window_properties['expected_items'] = intval( $this->wpo->found_posts );
+				$this->window_properties['current_items'] = 0;
+				$this->window_properties['base_query'] = $this->wpo->query;
+				$html = '';
+				$html .= '<div class="sysui-window-list">';
+				foreach ( $this->wpo->posts as $post ) {
+					$html .= sprintf( '<a href="%s" class="sysui-window-link">', get_the_permalink( $post ) );
+					if ( has_post_thumbnail( $post ) ) {
+						$icon = get_the_post_thumbnail_url( $post );
+					}
+					else {
+						$icon = Theme_Utils::asset_path( 'images/defaultapp.png' );	
+					}
+					$html .= sprintf( '<span class="sysui-window-icon"><img src="%s" /></span>', esc_attr( $icon ) );
+					$html .= sprintf( '<span class="sysui-window-label">%s</span>', esc_html( apply_filters( 'the_title', get_the_title( $post ) ) ) );
+					$html .= '</a>';
+					$this->window_properties['current_items'] ++;
+				}
+				$html .= '</div>';
+				$this->window_properties['content'] = $html;
+				//$this->window_properties['content'] .= sprintf( '<div class="sysui-text-content">%s</div>', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>' );
 				break;
 
 			case $this->wpo->is_single || $this->wpo->is_page:
@@ -187,8 +251,8 @@ class Page_Parser
 				break;
 			
 			default:
-				wp_send_json_error( $this->wpo );
-				
+				//$this->make_error_window( 'Debug', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>', true );
+				$this->make_error_window( 'Item not Found', 'Sorry, but the item you have requested could not be found' );
 				break;
 		}
 	}
@@ -268,6 +332,130 @@ class Page_Parser
 		$password = self::get_array_key( 'password', $data, '' );
 		$obj = new $c( $query, $password );
 		wp_send_json_success( $obj->get_window_object() );
+	}
+
+	public static function paged_query_request() {
+		$c = get_called_class();
+		$data = stripslashes_deep( $_POST );
+		$query = self::get_array_key( 'query', $data, '/' );
+		$wp_query = new WP_Query( $query );
+		$return = array();
+		foreach ( $wp_query->posts as $post ) {
+			if ( has_post_thumbnail( $post ) ) {
+				$icon = get_the_post_thumbnail_url( $post );
+			}
+			else {
+				$icon = Theme_Utils::asset_path( 'images/defaultapp.png' );	
+			}
+			$post_data = array(
+				'url' => get_the_permalink( $post ),
+				'icon' => $icon,
+				'label' => esc_html( apply_filters( 'the_title', get_the_title( $post ) ) ),
+			);
+			array_push( $return, $post_data );
+		}
+		if ( count( $return ) > 0 ) {
+			wp_send_json_success( $return );
+		}
+		wp_send_json_error( $return );
+	}
+
+	private static function get_the_permalink( WP_Query $wp_query )
+	{
+		switch ( true ) {
+			case $wp_query->is_home:
+				return home_url() . '/';
+				break;
+
+			case $wp_query->is_category:
+				$term = $wp_query->get_queried_object();
+				return get_category_link( $term->term_id );
+				break;
+
+			case $wp_query->is_tag:
+				$term = $wp_query->get_queried_object();
+				return get_tag_link( $term->term_id );
+				break;
+
+			case $wp_query->is_tax:
+				$term = $wp_query->get_queried_object();
+				return get_term_link( $term );
+				break;
+
+			case $wp_query->is_author:
+				$term = $wp_query->get_queried_object();
+				return get_author_posts_url( $term->ID );
+				break;
+
+			case $wp_query->is_archive:
+				$term = $wp_query->get_queried_object();
+				return get_term_link( $term );
+				break;
+
+			case $wp_query->is_search:
+				return get_search_link( self::get_array_key( 's', $wp_query->query ) );
+				break;
+
+			default:
+				return home_url() . '/';
+				break;
+		}
+	}
+
+	private static function make_title_from_wp_query( WP_Query $wp_query )
+	{
+		$term = $wp_query->get_queried_object();
+		switch ( true ) {
+			case $wp_query->is_category || $wp_query->is_tag:
+				$term = $wp_query->get_queried_object();
+				$title = $term->name;
+				if ( $wp_query->is_category ) {
+					$title = apply_filters( 'single_cat_title', $title );
+				}
+				if ( $wp_query->is_tag ) {
+					$title = apply_filters( 'single_tag_title', $title );
+				}
+				return $title;
+				break;
+
+			case $wp_query->is_tax && ( $term ):
+				$tax   = get_taxonomy( $term->taxonomy );
+				return single_term_title( $tax->labels->name, false );
+				break;
+
+			case $wp_query->is_author:
+				$author = $wp_query->get_queried_object();
+				return $author->display_name;
+				break;
+
+			case $wp_query->is_archive && ! empty( $wp_query->query_vars['m'] ):
+				$my_year  = substr( $wp_query->query_vars['m'], 0, 4 );
+				$my_month = $wp_locale->get_month( substr( $wp_query->query_vars['m'], 4, 2 ) );
+				$my_day   = intval( substr( $wp_query->query_vars['m'], 6, 2 ) );
+				$title    = $my_year . ( $my_month ? $t_sep . $my_month : '' ) . ( $my_day ? $t_sep . $my_day : '' );
+				return $title;
+				break;
+
+			case $wp_query->is_archive && ! empty( $wp_query->query_vars['y'] ):
+				$title = $wp_query->query_vars['year'];
+				if ( ! empty( $wp_query->query_vars['monthnum'] ) ) {
+					$title .= $t_sep . $wp_locale->get_month( $wp_query->query_vars['monthnum'] );
+				}
+				if ( ! empty( $wp_query->query_vars['day'] ) ) {
+					$title .= $t_sep . zeroise( $wp_query->query_vars['day'], 2 );
+				}
+				return $title;
+				break;
+
+			case $wp_query->is_search:
+				$title = sprintf( __( 'Search Results – %1$s' ), strip_tags( $search ) );
+				return $title;
+				break;
+
+			default:
+				return sprintf( '%s – %s', get_bloginfo( 'name' ), get_bloginfo( 'description' ) );
+				break;
+		}
 	}
 
 	private static function get_array_key( $key, $array, $default = null )

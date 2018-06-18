@@ -21,6 +21,14 @@ class Theme_Utils
 		return $title;
 	}
 
+    public static function get_title_format( $title = '%s', $seperator = '&nbsp;&raquo;&nbsp;' )
+    {
+        $title = sprintf( '%s%s%s', $title, $seperator, get_bloginfo( 'name' ) );
+        $title = apply_filters( 'wp_title', $title );
+        $title = trim( $title );
+        return $title;
+    }
+
 	public static function asset_path( $asset, $default = '#' )
 	{
 		$filepath = sprintf( '%s/assets/%s', JGT_THEME_BASE, $asset );

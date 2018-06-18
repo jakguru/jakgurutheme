@@ -19,6 +19,12 @@ button:focus {
 	line-height: 0;
 }
 
+code,
+pre {
+	white-space: pre;
+	line-height: 1em;
+}
+
 body > header.sysui-panel-outer {
 	border-left: none;
 	border-right: none;

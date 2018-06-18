@@ -92,7 +92,8 @@ var sysuiwindow = function( args ) {
 		height: 300,
 		maximized: false,
 		page_id: 0,
-		permalink: '',
+		permalink: '/',
+		expected_items: 0,
 	}
 	for ( var arg in properties ) {
 		if ( 'object' == typeof( args ) && typeof( args[ arg ] ) == typeof( properties[ arg ] ) ) {
@@ -273,8 +274,16 @@ var sysuiwindow = function( args ) {
 		if ( true == properties.maximized ) {
 			obj.maximize();	
 		}
-		// sysui-password-form
-		properties.onOpen( obj );
+		if (
+			'number' == typeof( args.current_items )
+			&& 'number' == typeof( args.expected_items )
+			&& args.current_items < args.expected_items
+		) {
+			get_paged_items( obj, args.base_query, 2, args.current_items, args.expected_items );
+		}
+		else {
+			properties.onOpen( obj );
+		}
 		obj.focus();
 	}
 	this.focus = function() {
@@ -304,6 +313,7 @@ var sysuiwindow = function( args ) {
 		if ( ! sw.is( ':visible' ) ) {
 			obj.restore();
 		}
+		update_url_and_title( sw.attr( 'permalink' ), sw.find( '.sysui-window-titlebar-title' ).html() );
 	}
 	this.blur = function() {
 		var sw = jQuery( '#' + obj.id );
@@ -313,6 +323,7 @@ var sysuiwindow = function( args ) {
 	this.close = function() {
 		jQuery( '#' + obj.id ).remove();
 		jQuery( '#sysui-taskbar-programs-wrapper' ).find( '[for="' + obj.id + '"]').remove();
+		update_url_and_title( app.site_path + '/', app.site_title );
 		properties.onClose();
 	}
 	this.maximize = function() {
@@ -332,6 +343,7 @@ var sysuiwindow = function( args ) {
 		jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).on( 'click', obj.restore );
 		jQuery( '#' + obj.id ).find( '.sysui-maximize-window img' ).attr( 'src', asset_path( 'images/restore.png' ) );
 		jQuery( '#' + obj.id ).focus();
+		jQuery( '.sysui-notifications-clock' ).click();
 	}
 	this.minimize = function() {
 		jQuery( '#' + obj.id ).css({
@@ -339,6 +351,7 @@ var sysuiwindow = function( args ) {
 		});
 		jQuery( '#' + obj.id ).attr( 'original-width', jQuery( '#' + obj.id ).children( '.sysui-panel-inner' ).css('width') );
 		jQuery( '#' + obj.id ).attr( 'original-height', jQuery( '#' + obj.id ).children( '.sysui-panel-inner' ).css('height') );
+		jQuery( '.sysui-notifications-clock' ).click();
 	}
 	this.restore = function() {
 		if ( ! jQuery( '#' + obj.id ).is(':visible' ) ) {
@@ -360,6 +373,45 @@ var sysuiwindow = function( args ) {
 			jQuery( '#' + obj.id ).find( '.sysui-maximize-window img' ).attr( 'src', asset_path( 'images/maximize.png' ) );
 			jQuery( '#' + obj.id ).focus();
 		}	
+	}
+	var get_paged_items = function( obj, base_query, page, current_items, expected_items ) {
+		if ( 'object' !== typeof( base_query ) ) {
+			return;
+		}
+		var query = base_query;
+		query.paged = page;
+		jQuery.ajax({
+			async: true,
+			cache: false,
+			crossDomain: false,
+			data: {
+				action: 'paged_query_request',
+				query: query,
+			},
+			success: function( data, textStatus, jqXHR ) {
+				if ( true == data.success ) {
+					var w = jQuery( '#' + obj.id );
+					for (var i = data.data.length - 1; i >= 0; i--) {
+						var mi = data.data[i];
+						w.find( '.sysui-window-list' ).append( sprintf(
+							'<a href="%s" class="sysui-window-link"><span class="sysui-window-icon"><img src="%s" /></span><span class="sysui-window-label">%s</span></a>',
+							mi.url,
+							mi.icon,
+							mi.label
+						) );
+					}
+					current_items = current_items + data.data.length;
+					if ( current_items < expected_items ) {
+						get_paged_items( obj, base_query, page + 1, current_items, expected_items );
+					}
+					else {
+						properties.onOpen( obj );
+					}
+				}
+			},
+			method: 'POST',
+			url: app.ajax_url,
+		});
 	}
 	if ( true == properties.autoopen ) {
 		obj.open();

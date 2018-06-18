@@ -82,8 +82,10 @@ add_action( 'init', function() {
 /** Add the application stylesheet and scripts */
 
 function get_application_script_localizations() {
+	$query = ( isset( $_SERVER['REQUEST_URI'] ) && strlen( $_SERVER['REQUEST_URI'] ) > 0 ) ? $_SERVER['REQUEST_URI'] : '/';
 	return array(
 		'site_path' => get_bloginfo( 'url' ),
+		'site_title' => Theme_Utils::get_page_title(),
 		'asset_path' => sprintf( '%s/assets/', JGT_MUTHEME_PATH ),
 		'ajax_url' => admin_url( 'admin-ajax.php' ),
 		'moment' => array(
@@ -119,6 +121,7 @@ function get_application_script_localizations() {
         		'maximized' => true,
         	),
         ),
+        'title_format' => Theme_Utils::get_title_format(),
 	);
 }
 
@@ -237,3 +240,5 @@ add_filter( 'wp_nav_menu_objects', function( $sorted_menu_items, $args ) {
 /** Add Handler for Front-End AJAX Requests */
 add_action( 'wp_ajax_page_request', array( 'Page_Parser', 'parse' ) );
 add_action( 'wp_ajax_nopriv_page_request', array( 'Page_Parser', 'parse' ) );
+add_action( 'wp_ajax_paged_query_request', array( 'Page_Parser', 'paged_query_request' ) );
+add_action( 'wp_ajax_nopriv_paged_query_request', array( 'Page_Parser', 'paged_query_request' ) );

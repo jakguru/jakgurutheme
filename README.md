@@ -107,6 +107,7 @@ This project has the following gulp commands configured:
 │   ├── sjs
 │   │   ├── bootstrap.js
 │   │   ├── core.js
+│   │   ├── history.js
 │   │   ├── index.php
 │   │   └── sysui-windows.js
 │   └── sounds

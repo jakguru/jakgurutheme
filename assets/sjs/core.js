@@ -13,6 +13,9 @@ jQuery( document ).ready(function() {
 	}
 	var query = window.location.href.substring( app.site_path.length );
 	open_page_by_query( query );
+	History.Adapter.bind(window,'statechange',function(){ // Note: We are using statechange instead of popstate
+		var State = History.getState(); // Note: We are using History.getState() instead of event.state
+	});
 });
 
 jQuery( '.custom-logo-link' ).on( 'click', function( e ) {
@@ -114,14 +117,21 @@ var open_page_by_query = function( query, password ) {
 				}
 				new sysuiwindow( data.data );
 			}
-			else {
-				console.log( data );
-			}
 			close_start_menu();
 		},
 		method: 'POST',
 		url: app.ajax_url,
 	});
+}
+
+var update_url_and_title = function( url, title ) {
+	if ( 'string' !== typeof( url ) || url.length == 0 || url == '/' ) {
+		url = app.site_path + '/';
+	}
+	if ( 'string' !== typeof( title ) ) {
+		title = jQuery( 'head>title' ).html();
+	}
+	History.replaceState({state:3}, sprintf( app.title_format, title ), url );
 }
 
 update_clock();
