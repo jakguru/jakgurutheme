@@ -29,7 +29,8 @@ class Page_Parser
 	private $private_query_vars = array( 'offset', 'posts_per_page', 'posts_per_archive_page', 'showposts', 'nopaging', 'post_type', 'post_status', 'category__in', 'category__not_in', 'category__and', 'tag__in', 'tag__not_in', 'tag__and', 'tag_slug__in', 'tag_slug__and', 'tag_id', 'post_mime_type', 'perm', 'comments_per_page', 'post__in', 'post__not_in', 'post_parent', 'post_parent__in', 'post_parent__not_in', 'title', 'fields' );
 	private $wpo = null;
 
-	public function __construct( $query ) {
+	public function __construct( $query )
+	{
 		global $wp_rewrite;
 		if ( ! apply_filters( 'do_parse_request', true, $this, $extra_query_vars ) ) {
 			return;
@@ -165,7 +166,21 @@ class Page_Parser
 					array_push( $this->window_properties['menus'], $edit_menu );
 				}
 				$this->window_properties['title'] = apply_filters( 'the_title', get_the_title( $post ) );
-				$post->post_content = apply_filters( 'the_content', $post->post_content );
+				if ( true == get_theme_mod( 'show_post_meta_info', true ) ) {
+					$original_content = apply_filters( 'the_content', $post->post_content );
+					//$post->post_content = '<pre>' . htmlentities( print_r( $post, true ) ) . '</pre>';
+					$post->post_content = sprintf(
+						__( 'Posted on %s by %s under %s' ),
+						date( get_option('date_format') . ' ' . get_option( 'time_format' ), strtotime( $post->post_date_gmt ) ),
+						self::get_author_display_html( $post->post_author ),
+						self::get_post_category_display_html( $post->ID )
+					);
+					$post->post_content .= '<hr />';
+					$post->post_content .= $original_content;
+				}
+				else {
+					$post->post_content = apply_filters( 'the_content', $post->post_content );
+				}
 				if ( get_comments_number( $post ) > 0 ) {
 					$comments = get_comments( array( 'post_id' => $post->ID ) );
 					$post->post_content .= '<hr />';
@@ -210,7 +225,8 @@ class Page_Parser
 		}
 	}
 
-	public function get_window_object() {
+	public function get_window_object()
+	{
 		$obj = new stdClass();
 		foreach ( $this->window_properties as $key => $value ) {
 			$obj->{ $key } = $value;
@@ -218,7 +234,8 @@ class Page_Parser
 		return $obj;
 	}
 
-	public static function parse() {
+	public static function parse()
+	{
 		$c = get_called_class();
 		$data = stripslashes_deep( $_POST );
 		$query = self::get_array_key( 'query', $data, '/' );
@@ -232,5 +249,31 @@ class Page_Parser
 			return $array[ $key ];
 		}
 		return $default;
+	}
+
+	private static function get_author_display_html( $author_id = 0 ) 
+	{
+		$url = get_the_author_meta( 'user_url', $author_id );
+		if ( is_null( $url ) || empty( $url ) ) {
+			$url = get_author_posts_url( $author_id );
+		}
+		return sprintf( '<a href="%s" class="author-display-link">%s</a>', $url, get_the_author_meta( 'display_name', $author_id ) );
+	}
+
+	private static function get_post_category_display_html( $post_id = 0 ) {
+		$terms = wp_get_post_categories( $post_id, array( 'fields' => 'all' ) );
+		$list = array();
+		foreach ( $terms as $term ) {
+			$url = get_category_link( $term->term_id );
+			array_push( $list, sprintf( '<a href="%s" class="category-display-link">%s</a>', $url, $term->name ) );
+		}
+		if ( count( $list ) > 1 ) {
+			$last = array_pop( $list );
+		}
+		$html = implode( ', ', $list );
+		if ( isset( $last ) ) {
+			$html .= ' ' . __( 'and' ) . ' ' . $last;
+		}
+		return $html;
 	}
 }

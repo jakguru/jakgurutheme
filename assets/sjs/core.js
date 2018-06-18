@@ -98,6 +98,9 @@ var open_page_by_query = function( query ) {
 		},
 		success: function( data, textStatus, jqXHR ) {
 			if ( true == data.success ) {
+				data.data.onOpen = function( obj ) {
+					jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
+				}
 				new sysuiwindow( data.data );
 			}
 			else {

@@ -112,6 +112,8 @@ var sysuiwindow = function( args ) {
 			properties.content
 		);
 		var sysuiwindow = jQuery( html );
+		sysuiwindow.attr( 'page-id', properties.page_id );
+		sysuiwindow.attr( 'permalink', properties.permalink );
 		sysuiwindow.css({
 			top: pos.top,
 			left: pos.left,

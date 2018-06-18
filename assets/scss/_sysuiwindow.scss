@@ -226,6 +226,13 @@
 	background: $sysui-window-text-background;
 	background-color: $sysui-window-text-background;
 	min-height: 100%;
+	clear: both;
+}
+
+.sysui-text-content:before,
+.sysui-text-content:after {
+	content: " ";
+	display: table;
 }
 
 .sysui-text-content p {

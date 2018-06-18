@@ -32,7 +32,7 @@
 						<div class="start-panel-seperator-relic"></div>
 					</div>
 					<?php
-					if ( true == get_theme_mod( 'enable_quicklaunch', true ) && has_nav_menu('quick_links') ) {
+					if ( true == get_theme_mod( 'enable_quicklaunch', true ) && has_nav_menu( 'quick_links' ) ) {
 					?>
 					<div id="sysui-taskbar-quick-launch-wrapper">
 						<div id="sysui-quick-launch-area">

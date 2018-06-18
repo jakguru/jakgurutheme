@@ -97,6 +97,7 @@ This project has the following gulp commands configured:
 │   │   └── index.php
 │   ├── scss
 │   │   ├── _colors.scss
+│   │   ├── _desktop.scss
 │   │   ├── global.scss
 │   │   ├── index.php
 │   │   ├── _startmenu.scss
@@ -125,11 +126,11 @@ This project has the following gulp commands configured:
 │   ├── class-wp-customize-utility.php
 │   ├── index.php
 │   └── menu-walkers
+│       ├── class-desktop-nav-walker.php
 │       ├── class-quick-links-nav-walker.php
 │       ├── class-start-menu-nav-walker.php
 │       ├── class-sysui-notifications-area-nav-walker.php
 │       └── index.php
 ├── README.md
 └── style.css
-
 ```

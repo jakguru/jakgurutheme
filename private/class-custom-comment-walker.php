@@ -30,10 +30,11 @@ class Custom_Comment_Walker extends Walker_Comment
 		$output .= '<div class="comment-body">';
 		$output .= apply_filters( 'comment_text', $item->comment_content, $item );
 		$output .= '</div>';
-		$output .= '<div class="comment-reply-link">';
-		$output .= sprintf( '<a href="#" class="sysui-add-comment-link" data-reply-to="%s">%s</a>', $item->comment_ID, __( 'Reply' ) );
-		$output .= '</div>';
-		//$output .= '<pre>' . print_r( $item, true ) . '</pre>';
+		if ( comments_open( $item->comment_post_ID ) ) {
+			$output .= '<div class="comment-reply-link">';
+			$output .= sprintf( '<a href="#" class="sysui-add-comment-link" data-reply-to="%s">%s</a>', $item->comment_ID, __( 'Reply' ) );
+			$output .= '</div>';
+		}
 	}
 
 	function end_el( &$output, $item, $depth = 0, $args = array() )

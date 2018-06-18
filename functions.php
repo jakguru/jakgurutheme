@@ -24,6 +24,7 @@ $private_files_to_be_loaded = array(
 	'menu-walkers/class-quick-links-nav-walker.php',
 	'menu-walkers/class-sysui-notifications-area-nav-walker.php',
 	'menu-walkers/class-start-menu-nav-walker.php',
+	'menu-walkers/class-desktop-nav-walker.php',
 );
 
 foreach ( $private_files_to_be_loaded as $filename ) {
@@ -151,6 +152,7 @@ add_action('after_setup_theme', function () {
 		'quick_links' => __( 'Quick Links' ),
 		'notification_area' => __( 'Notification Area' ),
 		'start_menu' => __( 'Start Menu' ),
+		'desktop' => __( 'Desktop' ),
 	) );
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'html5', array( 'caption', 'comment-form', 'comment-list', 'gallery', 'search-form' ) );
@@ -182,6 +184,28 @@ $wp_customize_utility->enqueue_control( 'enable_quicklaunch', array(
 	'type' => 'checkbox',
 	'default' => true,
 ) );
+$wp_customize_utility->enqueue_control( 'show_post_meta_info', array(
+	'label' => __( 'Show Post Meta Information' ),
+	'description' => __( 'Show Author Information and Post Date / Time' ),
+	'section' => array(
+		'id' => 'system-ui',
+		'title' => __( 'System UI' ),
+		'description' => __( 'Settings for how the System UI acts' ),
+	),
+	'type' => 'checkbox',
+	'default' => true,
+) );
+$wp_customize_utility->enqueue_control( 'default_menu_icon', array(
+	'label' => __( 'Default Menu Icon' ),
+	'description' => __( 'Default Menu Icon' ),
+	'section' => array(
+		'id' => 'system-ui',
+		'title' => __( 'System UI' ),
+		'description' => __( 'Settings for how the System UI acts' ),
+	),
+	'class' => 'WP_Customize_Image_Control',
+	'default' => Theme_Utils::asset_path( 'images/defaultapp.png' ),
+) );
 
 add_action( 'customize_register', array( $wp_customize_utility, 'register' ) );
 
@@ -191,7 +215,7 @@ $additional_menu_fields_utility = new Additional_Menu_Fields_Utility();
 $additional_menu_fields_utility->add_field( 'icon', array(
 	'label' => __( 'Icon' ),
 	'type' => 'image',
-	'default' => null,
+	'default' => get_theme_mod( 'default_menu_icon', Theme_Utils::asset_path( 'images/defaultapp.png' ) ),
 	'required' => true,
 ) );
 
@@ -213,9 +237,3 @@ add_filter( 'wp_nav_menu_objects', function( $sorted_menu_items, $args ) {
 /** Add Handler for Front-End AJAX Requests */
 add_action( 'wp_ajax_page_request', array( 'Page_Parser', 'parse' ) );
 add_action( 'wp_ajax_nopriv_page_request', array( 'Page_Parser', 'parse' ) );
-
-/** Change the Reply To Link */
-add_filter( 'comment_reply_link', function( $link, $args = array(), $comment = null, $post = null ) {
-	$link = print_r( $args, true );
-	return $link;
-});

@@ -72,7 +72,15 @@ class WP_Customize_Utility
 			if ( ! in_array( self::get_array_key( 'class', $args ), $this->wp_customize_control_classes ) ) {
 				$args['class'] = 'WP_Customize_Control';
 			}
-			$res = call_user_func( array( $wp_customize, 'add_control' ), $id, $args );
+			if ( 'WP_Customize_Control' !== $args['class'] ) {
+				unset( $args['type'] );
+				$new_args = new $args['class']( $wp_customize, $id, $args );
+				$args = $new_args;
+				$res = call_user_func( array( $wp_customize, 'add_control' ), $args );
+			}
+			else {
+				$res = call_user_func( array( $wp_customize, 'add_control' ), $id, $args );
+			}
 			if ( is_a( $res, 'WP_Customize_Control' ) ) {
 				array_push( $this->wp_customize_controls, $id );
 			}
