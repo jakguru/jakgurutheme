@@ -8,6 +8,9 @@ jQuery( document ).ready(function() {
 		jQuery( e.target ).trigger( 'rightclick', e );
 		//return false;
 	};
+	document.body.onselectstart = function() {
+		return false;
+	}
 });
 
 jQuery( '.custom-logo-link' ).on( 'click', function( e ) {
