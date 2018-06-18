@@ -80,7 +80,8 @@
 
 .sysui-window-menubar-wrapper {
 	border: solid 1px $sysui-window-menubar-wrapper-border;
-	display: block;	
+	display: block;
+	border-right: none;
 }
 
 .sysui-window-menubar {
@@ -211,6 +212,7 @@
 	background-color: $panel-bg;
 	white-space: nowrap;
 	display: block;
+	min-width: 80px;
 }
 
 .sysui-panel-inner > .sysui-window-menu-dropdown-item:first-child {
@@ -271,4 +273,8 @@
 
 .comment-reply-link {
 	margin-bottom: 10px;
+}
+
+.sysui-password-form {
+	padding: 5px;
 }

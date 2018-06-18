@@ -17,9 +17,9 @@ class Sysui_Notifications_Area_Nav_Walker extends \Walker_Nav_Menu
 	{
 		$output .= sprintf(
 			'<a href="%s" class="sysui-notification-link"><span><img src="%s" data-notification-text="%s" /></span></a>',
-			$item->url,
-			$item->icon,
-			$item->title
+			esc_url( $item->url ),
+			esc_url( $item->icon ),
+			esc_html( $item->title )
 		);
 	}
 

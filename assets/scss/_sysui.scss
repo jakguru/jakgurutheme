@@ -101,3 +101,32 @@ body > header.sysui-panel-outer > .sysui-panel-inner {
 	top: 1px;
 	left: 1px;
 }
+
+.sysui-button-label {
+	display: inline-block;
+	padding: 2px 5px;
+}
+
+.sysui-form-control-wrapper {
+	border: solid 1px;
+	border-top-color: $sysui-form-field-outer-dark;
+	border-left-color: $sysui-form-field-outer-dark;
+	border-right-color: $sysui-form-field-outer-light;
+	border-bottom-color: $sysui-form-field-outer-light;
+}
+
+.form-control {
+	border-radius: 0;
+	border-top-color: $sysui-form-field-inner-dark;
+	border-left-color: $sysui-form-field-inner-dark;
+	border-right-color: $sysui-form-field-inner-light;
+	border-bottom-color: $sysui-form-field-inner-light;
+}
+
+.form-control:focus {
+	border-top-color: $sysui-form-field-inner-dark;
+	border-left-color: $sysui-form-field-inner-dark;
+	border-right-color: $sysui-form-field-inner-light;
+	border-bottom-color: $sysui-form-field-inner-light;
+	box-shadow: none;
+}

@@ -11,6 +11,8 @@ jQuery( document ).ready(function() {
 	document.body.onselectstart = function() {
 		return false;
 	}
+	var query = window.location.href.substring( app.site_path.length );
+	open_page_by_query( query );
 });
 
 jQuery( '.custom-logo-link' ).on( 'click', function( e ) {
@@ -87,7 +89,7 @@ var handle_link_click = function( e ) {
 	}
 }
 
-var open_page_by_query = function( query ) {
+var open_page_by_query = function( query, password ) {
 	jQuery.ajax({
 		async: true,
 		cache: false,
@@ -95,11 +97,20 @@ var open_page_by_query = function( query ) {
 		data: {
 			action: 'page_request',
 			query: query,
+			password: ( 'string' == typeof( password ) ) ? password : '',
 		},
 		success: function( data, textStatus, jqXHR ) {
 			if ( true == data.success ) {
 				data.data.onOpen = function( obj ) {
 					jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
+					jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).on( 'submit', function( e ) {
+						e.preventDefault();
+						var form = jQuery( this ),
+							sq = form.find( '[name="query"]' ).val(),
+							pw = form.find( '[name="password"]' ).val();
+						obj.close();
+						open_page_by_query( sq, pw );
+					});
 				}
 				new sysuiwindow( data.data );
 			}

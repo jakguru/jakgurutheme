@@ -181,6 +181,13 @@ var sysuiwindow = function( args ) {
 		sysuiwindow.find( '.sysui-minimize-window' ).on( 'click', obj.minimize );
 		sysuiwindow.find( '.sysui-maximize-window' ).on( 'click', obj.maximize );
 		sysuiwindow.find( '.sysui-close-window' ).on( 'click', obj.close );
+		sysuiwindow.find( '.sysui-submit-window-form' ).on( 'click', function( e ) {
+			e.preventDefault();
+			sysuiwindow.find( 'form' ).each( function() {
+				var form = jQuery( this );
+				form.submit();
+			});
+		});
 		sysuiwindow.removeClass( 'sysui-window-loading' );
 		sysuiwindow.sysuiwindow = obj;
 		jQuery( 'body' ).append( sysuiwindow );
@@ -266,6 +273,7 @@ var sysuiwindow = function( args ) {
 		if ( true == properties.maximized ) {
 			obj.maximize();	
 		}
+		// sysui-password-form
 		properties.onOpen( obj );
 		obj.focus();
 	}

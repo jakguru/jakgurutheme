@@ -17,9 +17,9 @@ class Quick_Links_Nav_Walker extends \Walker_Nav_Menu
 	{
 		$output .= sprintf(
 			'<a href="%s" class="sysui-quick-link"><span><img src="%s" title="%s" /></span></a>',
-			$item->url,
-			$item->icon,
-			$item->title
+			esc_url( $item->url ),
+			esc_url( $item->icon ),
+			esc_html( $item->title )
 		);
 	}
 

@@ -54,9 +54,9 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 		}
 		$html .= sprintf( '<%s %s>', $tag, implode( ' ', $atts_array ) );
 		$html .= "\r\n";
-		$html .= sprintf( str_repeat( "\t", $depth + 1 ) . '<span class="sysui-start-menu-item-icon-wrapper"><img src="%s" /></span>', $item->icon );
+		$html .= sprintf( str_repeat( "\t", $depth + 1 ) . '<span class="sysui-start-menu-item-icon-wrapper"><img src="%s" /></span>', esc_url( $item->icon ) );
 		$html .= "\r\n";
-		$html .= sprintf( str_repeat( "\t", $depth + 1 ) . '<span class="sysui-start-menu-item-label">%s</span>', $item->title );
+		$html .= sprintf( str_repeat( "\t", $depth + 1 ) . '<span class="sysui-start-menu-item-label">%s</span>', esc_html( $item->title ) );
 		$html .= "\r\n";
 		$output .= $html;
 	}
