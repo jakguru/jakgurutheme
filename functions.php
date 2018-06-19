@@ -111,6 +111,8 @@ function get_application_script_localizations() {
         		'minimize' => true,
         		'maximize' => true,
         		'close' => true,
+        		'width' => 562,
+        		'height' => 400,
         		'menus' => array(
         			array(
         				'title' => __( 'File' ),
@@ -123,8 +125,9 @@ function get_application_script_localizations() {
         				),
         			),
         		),
-        		'content' => '<p>Eventually the search window will be here</p>',
-        		'maximized' => true,
+        		'content' => Theme_Utils::get_search_window_content( '' ),
+        		'permalink' => Theme_Utils::get_search_window_permalink(),
+        		'maximized' => false,
         	),
         ),
         'title_format' => Theme_Utils::get_title_format(),
@@ -288,3 +291,5 @@ add_action( 'wp_ajax_page_request', array( 'Page_Parser', 'parse' ) );
 add_action( 'wp_ajax_nopriv_page_request', array( 'Page_Parser', 'parse' ) );
 add_action( 'wp_ajax_paged_query_request', array( 'Page_Parser', 'paged_query_request' ) );
 add_action( 'wp_ajax_nopriv_paged_query_request', array( 'Page_Parser', 'paged_query_request' ) );
+add_action( 'wp_ajax_search_query_request', array( 'Page_Parser', 'search_query_request' ) );
+add_action( 'wp_ajax_nopriv_search_query_request', array( 'Page_Parser', 'search_query_request' ) );

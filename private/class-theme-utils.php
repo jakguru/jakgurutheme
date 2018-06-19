@@ -101,4 +101,28 @@ class Theme_Utils
         $output = strtr( $input, $replacements );
         return $output;
     }
+
+    public static function get_search_window_content( $original_html = '' )
+    {
+        $html = sprintf(
+            '<div class="sysui-search-window"><div class="sysui-search-left-panel"><div class="sysui-search-left-panel-inner"><div class="sysui-search-left-panel-title">%s</div><form class="sysui-search-left-panel-form" action="%s" method="POST"><div class="form-group"><label>%s</label><div class="sysui-form-control-wrapper"><input type="text" name="s" class="form-control form-control-sm" value="%s" required /></div></div><div class="sysui-form-submit-wrapper"><button class="sysui-button-outer" role="submit" type="submit"><div class="sysui-button-inner"><span class="sysui-button-label">%s</span></div></button></div></form></div></div><div class="sysui-search-right-panel"><div class="sysui-search-right-panel-inner">%s</div></div></div>',
+            __( 'Search' ),
+            admin_url( 'admin-ajax.php' ),
+            __( 'Search For:' ),
+            ( isset( $_GET['s'] ) ) ? esc_attr( $_GET['s'] ) : '',
+            __( 'Search Now' ),
+            $original_html
+        );
+        return $html;
+    }
+
+    public static function get_search_window_permalink()
+    {
+        $query = array();
+        if ( isset( $_GET['s'] ) && strlen( $_GET['s'] ) > 0 ) {
+            $query['s'] = $_GET['s'];
+        }
+        $query = http_build_query( $query );
+        return ( strlen( $query ) > 0 ) ? get_search_link( '?' . $query ) : get_search_link();
+    }
 }

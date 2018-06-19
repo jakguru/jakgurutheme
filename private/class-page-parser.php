@@ -41,7 +41,7 @@ class Page_Parser
 		$this->query_vars = array();
 		$post_type_query_vars = array();
 		$rewrite = $wp_rewrite->wp_rewrite_rules();
-		if ( ! empty( $rewrite ) && '/?p=' !== substr( $query, 0, 4 ) ) {
+		if ( ! empty( $rewrite ) && '/?p=' !== substr( $query, 0, 4 ) && '/?s=' !== substr( $query, 0, 4 ) && ! is_array( $query ) ) {
 			$requested_file = trim( $query, '/' );
 			$request_match = trim( $query, '/' );
 			if ( empty( $request_match ) ) {
@@ -175,6 +175,7 @@ class Page_Parser
 				$this->window_properties['permalink'] = self::get_the_permalink( $this->wpo );
 				$this->window_properties['expected_items'] = intval( $this->wpo->found_posts );
 				$this->window_properties['current_items'] = 0;
+				//$this->window_properties['base_query'] = array_replace_recursive( $this->original_query, $this->wpo->query );
 				$this->window_properties['base_query'] = $this->wpo->query;
 				$html = '';
 				$html .= '<div class="sysui-window-list">';
@@ -192,7 +193,16 @@ class Page_Parser
 					$this->window_properties['current_items'] ++;
 				}
 				$html .= '</div>';
-				$this->window_properties['content'] = $html;
+				if ( $this->wpo->is_search ) {
+					$this->window_properties['icon'] = Theme_Utils::asset_path( 'images/search.png' );
+					$this->window_properties['content'] = Theme_Utils::get_search_window_content( $html );
+					$this->window_properties['width'] = 562;
+					$this->window_properties['height'] = 400;
+					$this->window_properties['base_query']['s'] = self::get_array_key( 's', $this->original_query, $this->wpo->query_vars['s'] );
+				}
+				else {
+					$this->window_properties['content'] = $html;
+				}
 				//$this->window_properties['content'] .= sprintf( '<div class="sysui-text-content">%s</div>', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>' );
 				break;
 
@@ -362,6 +372,15 @@ class Page_Parser
 		wp_send_json_error( $return );
 	}
 
+	public static function search_query_request() {
+		$c = get_called_class();
+		$data = stripslashes_deep( $_POST );
+		$search = self::get_array_key( 's', $data, '/' );
+		$query = array( 's' => $search );
+		$obj = new $c( $query, '' );
+		wp_send_json_success( $obj->get_window_object() );
+	}
+
 	private static function get_the_permalink( WP_Query $wp_query )
 	{
 		switch ( true ) {
@@ -450,7 +469,7 @@ class Page_Parser
 				break;
 
 			case $wp_query->is_search:
-				$title = sprintf( __( 'Search Results – %1$s' ), strip_tags( $search ) );
+				$title = sprintf( __( 'Search Results – %s' ), strip_tags( $wp_query->query_vars['s'] ) );
 				return $title;
 				break;
 

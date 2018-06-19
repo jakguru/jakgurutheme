@@ -107,7 +107,9 @@ var open_page_by_query = function( query, password ) {
 		success: function( data, textStatus, jqXHR ) {
 			if ( true == data.success ) {
 				data.data.onOpen = function( obj ) {
+					jQuery( '#' + obj.id ).find( 'a' ).off( 'click' );
 					jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
+					jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).off( 'submit' );
 					jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).on( 'submit', function( e ) {
 						e.preventDefault();
 						var form = jQuery( this ),
@@ -115,6 +117,38 @@ var open_page_by_query = function( query, password ) {
 							pw = form.find( '[name="password"]' ).val();
 						obj.close();
 						open_page_by_query( sq, pw );
+					});
+					if ( 'undefined' !== typeof( data.data.base_query ) && 'undefined' !== typeof( data.data.base_query.s ) ) {
+						jQuery( '#' + obj.id ).find( '[name="s"]' ).val( data.data.base_query.s );
+					}
+					jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).off( 'submit' );
+					jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).on( 'submit', function( e ) {
+						e.preventDefault();
+						jQuery.ajax({
+							async: true,
+							cache: false,
+							crossDomain: false,
+							data: {
+								action: 'search_query_request',
+								s: jQuery( this ).find( '[name="s"]' ).val(),
+							},
+							success: function( redata, textStatus, jqXHR ) {
+								if ( true == redata.success ) {
+									console.log( redata.data );
+									var c = jQuery( redata.data.content );
+									jQuery( '#' + obj.id ).attr( 'page-id', redata.data.page_id );
+									jQuery( '#' + obj.id ).attr( 'permalink', redata.data.permalink );
+									jQuery( '#' + obj.id ).find( '.sysui-window-titlebar-title' ).html( redata.data.title );
+									//update_url_and_title( redata.data.permalink, redata.data.title );
+									jQuery( '#' + obj.id ).find( '.sysui-window-list' ).html( c.html() );
+									if ( redata.data.current_items < redata.data.expected_items ) {
+										obj.populate_paged_items( redata.data.base_query, 2, redata.data.current_items, redata.data.expected_items );
+									}
+								}
+							},
+							method: 'POST',
+							url: app.ajax_url,
+						});
 					});
 				}
 				new sysuiwindow( data.data );
