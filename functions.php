@@ -88,6 +88,12 @@ function get_application_script_localizations() {
 		'site_title' => Theme_Utils::get_page_title(),
 		'asset_path' => sprintf( '%s/assets/', JGT_MUTHEME_PATH ),
 		'ajax_url' => admin_url( 'admin-ajax.php' ),
+		'legal' => array(
+			'show_cookie_policy_notification' => get_theme_mod( 'show_cookie_policy_notification', true ),
+			'cookie_policy_notification_text' => __( 'This site uses cookies and other tracking technologies to assist with navigation and your ability to provide feedback, analyse your use of our products and services, assist with our promotional and marketing efforts, and provide content from third parties.' ),
+			'privacy_policy_url' => get_the_permalink( get_option( 'wp_page_for_privacy_policy' ) ),
+			'click_to_dismiss' => __( 'Click Here to Dismiss' ),
+		),
 		'moment' => array(
 			'datetimeformat' => Theme_Utils::phpDateFormatToMomentFormat( sprintf( '%s %s', get_option('date_format'), get_option('time_format') ) ),
 			'dateformat' => Theme_Utils::phpDateFormatToMomentFormat( get_option('date_format') ),
@@ -170,7 +176,6 @@ add_action('after_setup_theme', function () {
 		'default-color' => '#fff',
 	) );
 	add_theme_support( 'automatic-feed-links' );
-	add_editor_style( Theme_Utils::asset_path( 'css/app.min.css' ) );
 }, 20 );
 
 /** Add New Customize Controls */
@@ -209,8 +214,49 @@ $wp_customize_utility->enqueue_control( 'default_menu_icon', array(
 	'class' => 'WP_Customize_Image_Control',
 	'default' => Theme_Utils::asset_path( 'images/defaultapp.png' ),
 ) );
+$wp_customize_utility->enqueue_control( 'background_color', array(
+	'label' => __( 'Background Color' ),
+	'description' => __( 'Background Color' ),
+	'section' => 'colors',
+	'class' => 'WP_Customize_Color_Control',
+	'default' => '#346DA1',
+) );
+$wp_customize_utility->enqueue_control( 'desktop_text_color', array(
+	'label' => __( 'Desktop Text Color' ),
+	'description' => __( 'Desktop Text Color' ),
+	'section' => 'colors',
+	'class' => 'WP_Customize_Color_Control',
+	'default' => '#fff',
+) );
+$wp_customize_utility->enqueue_control( 'show_cookie_policy_notification', array(
+	'label' => __( 'Show Cookie Policy Notification' ),
+	'description' => __( 'Show a Notification to regarding Cookie Utilization' ),
+	'section' => array(
+		'id' => 'legal',
+		'title' => __( 'Legal' ),
+		'description' => __( 'Legal and Regulatory Compliance' ),
+		'priority' => 210,
+	),
+	'type' => 'checkbox',
+	'default' => true,
+) );
+$wp_customize_utility->enqueue_control( 'cookie_policy_notification_text', array(
+	'label' => __( 'Cookie Policy Notification Text' ),
+	'description' => __( 'Text to be shown in the notification to the visitor' ),
+	'section' => array(
+		'id' => 'legal',
+		'title' => __( 'Legal' ),
+		'description' => __( 'Legal and Regulatory Compliance' ),
+		'priority' => 210,
+	),
+	'type' => 'text',
+	'default' => __( 'This site uses cookies and other tracking technologies to assist with navigation and your ability to provide feedback, analyse your use of our products and services, assist with our promotional and marketing efforts, and provide content from third parties.' ),
+) );
 
 add_action( 'customize_register', array( $wp_customize_utility, 'register' ) );
+add_action( 'wp_enqueue_scripts', function() {
+	wp_add_inline_style( 'css/app.min.css', sprintf( '.sysui-desktop-link>.sysui-desktop-label{color:%s}', wp_strip_all_tags( get_theme_mod( 'desktop_text_color', '#fff' ) ) ) );
+} );
 
 /** Add Additional Fields to Menu Editor */
 $additional_menu_fields_utility = new Additional_Menu_Fields_Utility();

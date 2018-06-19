@@ -1,5 +1,6 @@
 @import "../../node_modules/sprintf-js/src/sprintf.js";
 @import "../../node_modules/moment/min/moment-with-locales.js";
+@import "../../node_modules/js-cookie/src/js.cookie.js";
 
 jQuery( document ).ready(function() {
 	document.oncontextmenu = function( e ) {
@@ -16,6 +17,7 @@ jQuery( document ).ready(function() {
 	History.Adapter.bind(window,'statechange',function(){ // Note: We are using statechange instead of popstate
 		var State = History.getState(); // Note: We are using History.getState() instead of event.state
 	});
+	show_cookie_policy_notification();
 });
 
 jQuery( '.custom-logo-link' ).on( 'click', function( e ) {
@@ -132,6 +134,35 @@ var update_url_and_title = function( url, title ) {
 		title = jQuery( 'head>title' ).html();
 	}
 	History.replaceState({state:3}, sprintf( app.title_format, title ), url );
+}
+
+var show_cookie_policy_notification = function() {
+	if ( true !== app.legal.show_cookie_policy_notification ) {
+		return;
+	}
+	var accepted_cookie_policy = Cookies.get( 'accepted_cookie_policy' );
+	if ( 'undefined' == typeof( accepted_cookie_policy ) ) {
+		var html = sprintf( '<a href="%s" class="sysui-notification-link"><span><img src="%s" /></span></a>', app.legal.privacy_policy_url, app.asset_path + 'images/info.png' );
+		var notification = jQuery( html );
+		jQuery( '#menu-notification-menu' ).prepend( notification );
+		var image = notification.find( 'img' );
+		jQuery( image ).popover({
+			container: notification.closest( 'header' ),
+			content: app.legal.cookie_policy_notification_text,
+			placement: 'top',
+			trigger: 'manual',
+			template: sprintf( '<div class="popover cookie-popover" role="tooltip" title="%s"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>', app.legal.click_to_dismiss ),
+		});
+		jQuery( image ).on( 'inserted.bs.popover', function( e ) {
+			jQuery( '.cookie-popover' ).on( 'click', function( e ) {
+				e.preventDefault();
+				Cookies.set( 'accepted_cookie_policy', 'yes' );
+				jQuery( image ).popover('dispose');
+				notification.remove();
+			});
+		});
+		jQuery( image ).popover('show');
+	}
 }
 
 update_clock();
