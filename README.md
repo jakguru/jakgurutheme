@@ -97,9 +97,11 @@ This project has the following gulp commands configured:
 │   │   └── index.php
 │   ├── scss
 │   │   ├── _colors.scss
+│   │   ├── _comments.scss
 │   │   ├── _desktop.scss
 │   │   ├── global.scss
 │   │   ├── index.php
+│   │   ├── _search.scss
 │   │   ├── _startmenu.scss
 │   │   ├── _sysui.scss
 │   │   ├── _sysuiwindow.scss
@@ -109,6 +111,7 @@ This project has the following gulp commands configured:
 │   │   ├── core.js
 │   │   ├── history.js
 │   │   ├── index.php
+│   │   ├── sysui-notifications.js
 │   │   └── sysui-windows.js
 │   └── sounds
 │       └── index.php

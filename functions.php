@@ -103,6 +103,39 @@ function get_application_script_localizations() {
         	'minimize' => __( 'Minimize' ),
         	'maximize' => __( 'Maximize' ),
         	'close' => __( 'Close' ),
+        	'leave_a_comment' => __( 'Leave a Comment on %s'),
+        	'comment_successful' => __( 'Your comment was saved successfully' ),
+        ),
+        'defaultwindows' => array(
+        	'comment' => array(
+        		'icon' => Theme_Utils::asset_path( 'images/notepad.png' ),
+        		'title' => __( 'Leave a Comment' ),
+        		'minimize' => true,
+        		'maximize' => true,
+        		'close' => true,
+        		'width' => 562,
+        		'height' => 400,
+        		'menus' => array(
+        			array(
+        				'title' => __( 'File' ),
+        				'items' => array(
+        					array(
+        						'title' => __( 'Save Comment' ),
+        						'href' => '#',
+        						'class' => 'sysui-save-comment',
+        					),
+        					array(
+        						'title' => __( 'Close' ),
+        						'href' => '#',
+        						'class' => 'sysui-close-window',
+        					),
+        				),
+        			),
+        		),
+        		'content' => sprintf( '<form class="sysui-comment-form" action="%s" method="POST"><textarea name="comment" class="form-control full-height-no-resize" placeholder="%s" autofocus required></textarea></form>', admin_url( 'admin-ajax.php' ), __( 'Write your comment here and save from the File menu' ) ),
+        		'permalink' => home_url(),
+        		'maximized' => false,
+        	),
         ),
         'title_format' => Theme_Utils::get_title_format(),
 	);
@@ -267,3 +300,5 @@ add_action( 'wp_ajax_paged_query_request', array( 'Page_Parser', 'paged_query_re
 add_action( 'wp_ajax_nopriv_paged_query_request', array( 'Page_Parser', 'paged_query_request' ) );
 add_action( 'wp_ajax_search_query_request', array( 'Page_Parser', 'search_query_request' ) );
 add_action( 'wp_ajax_nopriv_search_query_request', array( 'Page_Parser', 'search_query_request' ) );
+add_action( 'wp_ajax_add_comment_to_post', array( 'Page_Parser', 'add_comment_to_post' ) );
+add_action( 'wp_ajax_nopriv_add_comment_to_post', array( 'Page_Parser', 'add_comment_to_post' ) );

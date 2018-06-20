@@ -92,9 +92,69 @@ var handle_link_click = function( e ) {
 			open_page_by_query( query );
 		}
 	}
+	if ( '#' == link.attr( 'href' ) ) {
+		e.preventDefault();
+	}
+	if ( link.hasClass( 'sysui-add-comment-link' ) ) {
+		var comment_form_data = {
+			post_id: link.closest( '.sysui-window' ).attr( 'page-id' ),
+			reply_to: link.attr( 'data-reply-to' ),
+		}
+		for ( var key in comment_form_data ) {
+			if ( 'string' == typeof( comment_form_data[key] ) ) {
+				comment_form_data[key] = parseFloat( comment_form_data[key] );
+			}
+		}
+		var windowdata = app.defaultwindows.comment;
+		windowdata.title = sprintf( app.terms.leave_a_comment, link.closest( '.sysui-window' ).find( '.sysui-window-titlebar-title' ).html() );
+		windowdata.permalink = link.closest( '.sysui-window' ).attr( 'permalink' );
+		windowdata.onOpen = function( obj ) {
+			jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
+			jQuery( '#' + obj.id ).find( 'form' ).on( 'submit', function( e ) {
+				e.preventDefault();
+				comment_form_data.content = jQuery( this ).find( '[name="comment"]' ).val();
+				comment_form_data.action = 'add_comment_to_post';
+				jQuery.ajax({
+					async: true,
+					cache: false,
+					crossDomain: false,
+					data: comment_form_data,
+					success: function( data, textStatus, jqXHR ) {
+						if ( data.success == true ) {
+							jQuery( '[page-id="' + data.data.post + '"]' ).each( function() {
+								var uiw = jQuery( this ),
+									query = uiw.attr( 'permalink' );
+								get_page_info_by_query( query.substring( app.site_path.length ), '', function( data ) {
+									if ( true == data.success ) {
+										uiw.find( '.sysui-panel-window-content' ).html( data.data.content );
+										uiw.find( '.sysui-panel-window-content' ).find( 'a' ).on( 'click', handle_link_click );
+									}
+								} );
+							});
+							obj.close();
+							new sysuinotification({ content: app.terms.comment_successful, icon: app.asset_path + 'images/info.png' });
+						}
+						else if ( 'string' == typeof( data.data ) ) {
+							new sysuinotification({ content: data.data, icon: app.asset_path + 'images/stop.png' });
+						}
+					},
+					method: 'POST',
+					url: app.ajax_url,
+				});
+			});
+			jQuery( '#' + obj.id ).find( 'a.sysui-save-comment' ).on( 'click', function( e ) {
+				e.preventDefault();
+				jQuery( '#' + obj.id ).find( 'form' ).submit();
+			});
+		}
+		new sysuiwindow( windowdata );
+	}
 }
 
-var open_page_by_query = function( query, password ) {
+var get_page_info_by_query = function( query, password, success ) {
+	if ( 'function' !== typeof( success ) ) {
+		success = function(){};
+	}
 	jQuery.ajax({
 		async: true,
 		cache: false,
@@ -104,85 +164,89 @@ var open_page_by_query = function( query, password ) {
 			query: query,
 			password: ( 'string' == typeof( password ) ) ? password : '',
 		},
-		success: function( data, textStatus, jqXHR ) {
-			if ( true == data.success ) {
-				data.data.onOpen = function( obj ) {
-					if ( 'undefined' !== typeof( data.data.base_query ) && 'undefined' !== typeof( data.data.base_query.s ) ) {
-						obj.searchterm = data.data.base_query.s;
-					}
-					if ( 'string' == typeof( jQuery( '#' + obj.id ).find( '[name="s"]' ).val() ) && jQuery( '#' + obj.id ).find( '[name="s"]' ).val().length == 0 ) {
-						jQuery( '#' + obj.id ).find( '[name="s"]' ).val( obj.searchterm );
-					}
-					setTimeout( function(){
-						jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
-						jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).on( 'submit', function( e ) {
-							e.preventDefault();
-							var form = jQuery( this ),
-								sq = form.find( '[name="query"]' ).val(),
-								pw = form.find( '[name="password"]' ).val();
-							obj.close();
-							open_page_by_query( sq, pw );
-						});
-						jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).on( 'submit', function( e ) {
-							e.preventDefault();
-							jQuery.ajax({
-								async: true,
-								cache: false,
-								crossDomain: false,
-								data: {
-									action: 'search_query_request',
-									s: jQuery( this ).find( '[name="s"]' ).val(),
-								},
-								success: function( redata, textStatus, jqXHR ) {
-									if ( true == redata.success ) {
-										var c = jQuery( redata.data.content );
-										jQuery( '#' + obj.id ).attr( 'page-id', redata.data.page_id );
-										jQuery( '#' + obj.id ).attr( 'permalink', redata.data.permalink );
-										jQuery( '#' + obj.id ).find( '.sysui-window-titlebar-title' ).html( redata.data.title );
-										jQuery( '[for="' + obj.id + '"] .sysui-taskbar-program-title' ).html( redata.data.title );
-										update_url_and_title( redata.data.permalink, redata.data.title );
-										jQuery( '#' + obj.id ).find( '.sysui-window-list' ).html( c.html() );
-										jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).off( 'click' );
-										jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).on( 'click', obj.minimize );
-										jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).off( 'click' );
-										jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).on( 'click', obj.maximize );
-										jQuery( '#' + obj.id ).find( '.sysui-close-window' ).off( 'click' );
-										jQuery( '#' + obj.id ).find( '.sysui-close-window' ).on( 'click', obj.close );
-										jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).off( 'click' );
-										jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).on( 'click', function( e ) {
-											e.preventDefault();
-											sysuiwindow.find( 'form' ).each( function() {
-												var form = jQuery( this );
-												form.submit();
-											});
-										});
-										if ( 'undefined' !== typeof( redata.data.base_query ) && 'undefined' !== typeof( redata.data.base_query.s ) ) {
-											obj.searchterm = redata.data.base_query.s;
-											jQuery( '#' + obj.id ).find( '[name="s"]' ).val( obj.searchterm );
-										}
-										if ( redata.data.current_items < redata.data.expected_items ) {
-											obj.populate_paged_items( redata.data.base_query, 2, redata.data.current_items, redata.data.expected_items );
-										}
-										else {
-											obj.triggerOpened();
-										}
-									}
-								},
-								method: 'POST',
-								url: app.ajax_url,
-							});
-						});
-					},100 );
-					jQuery( '#' + obj.id ).find( 'a' ).off( 'click' );
-					jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).off( 'submit' );
-					jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).off( 'submit' );
-				}
-				new sysuiwindow( data.data );
-			}
-			close_start_menu();
-		},
+		success: success,
 		method: 'POST',
 		url: app.ajax_url,
+	});
+}
+
+var open_page_by_query = function( query, password ) {
+	get_page_info_by_query( query, password, function( data, textStatus, jqXHR ) {
+		if ( true == data.success ) {
+			data.data.onOpen = function( obj ) {
+				if ( 'undefined' !== typeof( data.data.base_query ) && 'undefined' !== typeof( data.data.base_query.s ) ) {
+					obj.searchterm = data.data.base_query.s;
+				}
+				if ( 'string' == typeof( jQuery( '#' + obj.id ).find( '[name="s"]' ).val() ) && jQuery( '#' + obj.id ).find( '[name="s"]' ).val().length == 0 ) {
+					jQuery( '#' + obj.id ).find( '[name="s"]' ).val( obj.searchterm );
+				}
+				setTimeout( function(){
+					jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
+					jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).on( 'submit', function( e ) {
+						e.preventDefault();
+						var form = jQuery( this ),
+							sq = form.find( '[name="query"]' ).val(),
+							pw = form.find( '[name="password"]' ).val();
+						obj.close();
+						open_page_by_query( sq, pw );
+					});
+					jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).on( 'submit', function( e ) {
+						e.preventDefault();
+						jQuery.ajax({
+							async: true,
+							cache: false,
+							crossDomain: false,
+							data: {
+								action: 'search_query_request',
+								s: jQuery( this ).find( '[name="s"]' ).val(),
+							},
+							success: function( redata, textStatus, jqXHR ) {
+								if ( true == redata.success ) {
+									var c = jQuery( redata.data.content );
+									jQuery( '#' + obj.id ).attr( 'page-id', redata.data.page_id );
+									jQuery( '#' + obj.id ).attr( 'permalink', redata.data.permalink );
+									jQuery( '#' + obj.id ).find( '.sysui-window-titlebar-title' ).html( redata.data.title );
+									jQuery( '[for="' + obj.id + '"] .sysui-taskbar-program-title' ).html( redata.data.title );
+									update_url_and_title( redata.data.permalink, redata.data.title );
+									jQuery( '#' + obj.id ).find( '.sysui-window-list' ).html( c.html() );
+									jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).off( 'click' );
+									jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).on( 'click', obj.minimize );
+									jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).off( 'click' );
+									jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).on( 'click', obj.maximize );
+									jQuery( '#' + obj.id ).find( '.sysui-close-window' ).off( 'click' );
+									jQuery( '#' + obj.id ).find( '.sysui-close-window' ).on( 'click', obj.close );
+									jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).off( 'click' );
+									jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).on( 'click', function( e ) {
+										e.preventDefault();
+										sysuiwindow.find( 'form' ).each( function() {
+											var form = jQuery( this );
+											form.submit();
+										});
+									});
+									if ( 'undefined' !== typeof( redata.data.base_query ) && 'undefined' !== typeof( redata.data.base_query.s ) ) {
+										obj.searchterm = redata.data.base_query.s;
+										jQuery( '#' + obj.id ).find( '[name="s"]' ).val( obj.searchterm );
+									}
+									if ( redata.data.current_items < redata.data.expected_items ) {
+										obj.populate_paged_items( redata.data.base_query, 2, redata.data.current_items, redata.data.expected_items );
+									}
+									else {
+										obj.triggerOpened();
+									}
+								}
+							},
+							method: 'POST',
+							url: app.ajax_url,
+						});
+					});
+				},100 );
+				jQuery( '#' + obj.id ).find( 'a' ).off( 'click' );
+				jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).off( 'submit' );
+				jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).off( 'submit' );
+			}
+			new sysuiwindow( data.data );
+		}
+		close_start_menu();
 	});
 }
 

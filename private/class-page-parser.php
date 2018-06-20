@@ -376,7 +376,8 @@ class Page_Parser
 		wp_send_json_error( $return );
 	}
 
-	public static function search_query_request() {
+	public static function search_query_request()
+	{
 		$c = get_called_class();
 		$data = stripslashes_deep( $_POST );
 		$search = self::get_array_key( 's', $data, '/' );
@@ -409,6 +410,34 @@ class Page_Parser
 		$return_object['width'] = 562;
 		$return_object['height'] = 400;
 		wp_send_json_success( $return_object );
+	}
+
+	public static function add_comment_to_post()
+	{
+		$c = get_called_class();
+		$data = stripslashes_deep( $_POST );
+		$wp_user = wp_get_current_user();
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( __( 'You must be logged in to comment' ) );
+		}
+		$comment_data = array(
+			'comment_post_ID' => intval( self::get_array_key( 'post_id', $data, 0 ) ),
+			'comment_parent' => intval( self::get_array_key( 'reply_to', $data, 0 ) ),
+			'comment_content' => esc_html( self::get_array_key( 'content', $data, '' ) ),
+			'user_id' => $wp_user->ID,
+			'comment_author' => $wp_user->display_name,
+			'comment_author_email' => $wp_user->user_email,
+			'comment_author_url' => $wp_user->user_url,
+		);
+		//wp_send_json_error( print_r( $comment_data, true ) );
+		$res = wp_new_comment( $comment_data, true );
+		if ( is_a( $res, 'WP_Error' ) ) {
+			wp_send_json_error( $res->get_error_message() );
+		}
+		wp_send_json_success( array(
+			'post' => intval( self::get_array_key( 'post_id', $data, 0 ) ),
+			'comment' => $res,
+		) );
 	}
 
 	private static function get_the_permalink( WP_Query $wp_query )
