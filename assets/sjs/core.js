@@ -141,6 +141,22 @@ var open_page_by_query = function( query, password ) {
 									jQuery( '#' + obj.id ).find( '.sysui-window-titlebar-title' ).html( redata.data.title );
 									//update_url_and_title( redata.data.permalink, redata.data.title );
 									jQuery( '#' + obj.id ).find( '.sysui-window-list' ).html( c.html() );
+									jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).off( 'click' );
+									jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).on( 'click', obj.minimize );
+									jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).off( 'click' );
+									jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).on( 'click', obj.maximize );
+									jQuery( '#' + obj.id ).find( '.sysui-close-window' ).off( 'click' );
+									jQuery( '#' + obj.id ).find( '.sysui-close-window' ).on( 'click', obj.close );
+									jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).off( 'click' );
+									jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).on( 'click', function( e ) {
+										e.preventDefault();
+										sysuiwindow.find( 'form' ).each( function() {
+											var form = jQuery( this );
+											form.submit();
+										});
+									});
+
+
 									if ( redata.data.current_items < redata.data.expected_items ) {
 										obj.populate_paged_items( redata.data.base_query, 2, redata.data.current_items, redata.data.expected_items );
 									}
@@ -178,10 +194,10 @@ var show_cookie_policy_notification = function() {
 	if ( 'undefined' == typeof( accepted_cookie_policy ) ) {
 		var html = sprintf( '<a href="%s" class="sysui-notification-link"><span><img src="%s" /></span></a>', app.legal.privacy_policy_url, app.asset_path + 'images/info.png' );
 		var notification = jQuery( html );
-		jQuery( '#menu-notification-menu' ).prepend( notification );
+		jQuery( '#sysui-notifications > nav' ).prepend( notification );
 		var image = notification.find( 'img' );
 		jQuery( image ).popover({
-			container: notification.closest( 'header' ),
+			container: '#sysui-taskbar',
 			content: app.legal.cookie_policy_notification_text,
 			placement: 'top',
 			trigger: 'manual',

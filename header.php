@@ -11,7 +11,7 @@
 		<?php wp_head(); ?>
 	</head>
 	<body <?php body_class(); ?>>
-		<header class="sysui-panel-outer">
+		<header class="sysui-panel-outer" id="sysui-taskbar">
 			<div class="sysui-panel-inner">
 				<div id="sysui-taskbar-outer">
 					<div id="sysui-taskbar-start-wrapper">
