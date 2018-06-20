@@ -240,7 +240,7 @@ var open_page_by_query = function( query, password ) {
 						});
 					});
 				},100 );
-				jQuery( '#' + obj.id ).find( 'a' ).off( 'click' );
+				jQuery( '#' + obj.id ).find( 'a:not(.sysui-close-window)' ).off( 'click' );
 				jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).off( 'submit' );
 				jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).off( 'submit' );
 			}
