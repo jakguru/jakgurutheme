@@ -107,65 +107,75 @@ var open_page_by_query = function( query, password ) {
 		success: function( data, textStatus, jqXHR ) {
 			if ( true == data.success ) {
 				data.data.onOpen = function( obj ) {
-					jQuery( '#' + obj.id ).find( 'a' ).off( 'click' );
-					jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
-					jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).off( 'submit' );
-					jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).on( 'submit', function( e ) {
-						e.preventDefault();
-						var form = jQuery( this ),
-							sq = form.find( '[name="query"]' ).val(),
-							pw = form.find( '[name="password"]' ).val();
-						obj.close();
-						open_page_by_query( sq, pw );
-					});
 					if ( 'undefined' !== typeof( data.data.base_query ) && 'undefined' !== typeof( data.data.base_query.s ) ) {
-						jQuery( '#' + obj.id ).find( '[name="s"]' ).val( data.data.base_query.s );
+						obj.searchterm = data.data.base_query.s;
 					}
-					jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).off( 'submit' );
-					jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).on( 'submit', function( e ) {
-						e.preventDefault();
-						jQuery.ajax({
-							async: true,
-							cache: false,
-							crossDomain: false,
-							data: {
-								action: 'search_query_request',
-								s: jQuery( this ).find( '[name="s"]' ).val(),
-							},
-							success: function( redata, textStatus, jqXHR ) {
-								if ( true == redata.success ) {
-									console.log( redata.data );
-									var c = jQuery( redata.data.content );
-									jQuery( '#' + obj.id ).attr( 'page-id', redata.data.page_id );
-									jQuery( '#' + obj.id ).attr( 'permalink', redata.data.permalink );
-									jQuery( '#' + obj.id ).find( '.sysui-window-titlebar-title' ).html( redata.data.title );
-									//update_url_and_title( redata.data.permalink, redata.data.title );
-									jQuery( '#' + obj.id ).find( '.sysui-window-list' ).html( c.html() );
-									jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).off( 'click' );
-									jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).on( 'click', obj.minimize );
-									jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).off( 'click' );
-									jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).on( 'click', obj.maximize );
-									jQuery( '#' + obj.id ).find( '.sysui-close-window' ).off( 'click' );
-									jQuery( '#' + obj.id ).find( '.sysui-close-window' ).on( 'click', obj.close );
-									jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).off( 'click' );
-									jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).on( 'click', function( e ) {
-										e.preventDefault();
-										sysuiwindow.find( 'form' ).each( function() {
-											var form = jQuery( this );
-											form.submit();
-										});
-									});
-
-
-									if ( redata.data.current_items < redata.data.expected_items ) {
-										obj.populate_paged_items( redata.data.base_query, 2, redata.data.current_items, redata.data.expected_items );
-									}
-								}
-							},
-							method: 'POST',
-							url: app.ajax_url,
+					if ( 'string' == typeof( jQuery( '#' + obj.id ).find( '[name="s"]' ).val() ) && jQuery( '#' + obj.id ).find( '[name="s"]' ).val().length == 0 ) {
+						jQuery( '#' + obj.id ).find( '[name="s"]' ).val( obj.searchterm );
+					}
+					setTimeout( function(){
+						jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
+						jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).on( 'submit', function( e ) {
+							e.preventDefault();
+							var form = jQuery( this ),
+								sq = form.find( '[name="query"]' ).val(),
+								pw = form.find( '[name="password"]' ).val();
+							obj.close();
+							open_page_by_query( sq, pw );
 						});
-					});
+						jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).on( 'submit', function( e ) {
+							e.preventDefault();
+							jQuery.ajax({
+								async: true,
+								cache: false,
+								crossDomain: false,
+								data: {
+									action: 'search_query_request',
+									s: jQuery( this ).find( '[name="s"]' ).val(),
+								},
+								success: function( redata, textStatus, jqXHR ) {
+									if ( true == redata.success ) {
+										var c = jQuery( redata.data.content );
+										jQuery( '#' + obj.id ).attr( 'page-id', redata.data.page_id );
+										jQuery( '#' + obj.id ).attr( 'permalink', redata.data.permalink );
+										jQuery( '#' + obj.id ).find( '.sysui-window-titlebar-title' ).html( redata.data.title );
+										jQuery( '[for="' + obj.id + '"] .sysui-taskbar-program-title' ).html( redata.data.title );
+										update_url_and_title( redata.data.permalink, redata.data.title );
+										jQuery( '#' + obj.id ).find( '.sysui-window-list' ).html( c.html() );
+										jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).off( 'click' );
+										jQuery( '#' + obj.id ).find( '.sysui-minimize-window' ).on( 'click', obj.minimize );
+										jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).off( 'click' );
+										jQuery( '#' + obj.id ).find( '.sysui-maximize-window' ).on( 'click', obj.maximize );
+										jQuery( '#' + obj.id ).find( '.sysui-close-window' ).off( 'click' );
+										jQuery( '#' + obj.id ).find( '.sysui-close-window' ).on( 'click', obj.close );
+										jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).off( 'click' );
+										jQuery( '#' + obj.id ).find( '.sysui-submit-window-form' ).on( 'click', function( e ) {
+											e.preventDefault();
+											sysuiwindow.find( 'form' ).each( function() {
+												var form = jQuery( this );
+												form.submit();
+											});
+										});
+										if ( 'undefined' !== typeof( redata.data.base_query ) && 'undefined' !== typeof( redata.data.base_query.s ) ) {
+											obj.searchterm = redata.data.base_query.s;
+											jQuery( '#' + obj.id ).find( '[name="s"]' ).val( obj.searchterm );
+										}
+										if ( redata.data.current_items < redata.data.expected_items ) {
+											obj.populate_paged_items( redata.data.base_query, 2, redata.data.current_items, redata.data.expected_items );
+										}
+										else {
+											obj.triggerOpened();
+										}
+									}
+								},
+								method: 'POST',
+								url: app.ajax_url,
+							});
+						});
+					},100 );
+					jQuery( '#' + obj.id ).find( 'a' ).off( 'click' );
+					jQuery( '#' + obj.id ).find( 'form.sysui-password-form' ).off( 'submit' );
+					jQuery( '#' + obj.id ).find( 'form.sysui-search-left-panel-form' ).off( 'submit' );
 				}
 				new sysuiwindow( data.data );
 			}
@@ -221,11 +231,3 @@ fix_start_menu_os_identifier_height();
 jQuery( '#sysui-start' ).on( 'click', handle_start_button_click );
 jQuery( document ).on( 'mouseup', handle_desktop_click );
 jQuery( 'a' ).on( 'click', handle_link_click );
-jQuery( '.sysui-activate-seach' ).on( 'click', function( e ) {
-	e.preventDefault();
-	app.defaultwindows.search.onOpen = function( obj ) {
-		jQuery( '#' + obj.id ).find( 'a' ).on( 'click', handle_link_click );
-	}
-	new sysuiwindow( app.defaultwindows.search );
-	close_start_menu();
-});

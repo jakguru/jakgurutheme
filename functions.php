@@ -104,32 +104,6 @@ function get_application_script_localizations() {
         	'maximize' => __( 'Maximize' ),
         	'close' => __( 'Close' ),
         ),
-        'defaultwindows' => array(
-        	'search' => array(
-        		'icon' => Theme_Utils::asset_path( 'images/search.png' ),
-        		'title' => __( 'Search' ),
-        		'minimize' => true,
-        		'maximize' => true,
-        		'close' => true,
-        		'width' => 562,
-        		'height' => 400,
-        		'menus' => array(
-        			array(
-        				'title' => __( 'File' ),
-        				'items' => array(
-        					array(
-        						'title' => __( 'Close' ),
-        						'href' => '#',
-        						'class' => 'sysui-close-window',
-        					),
-        				),
-        			),
-        		),
-        		'content' => Theme_Utils::get_search_window_content( '' ),
-        		'permalink' => Theme_Utils::get_search_window_permalink(),
-        		'maximized' => false,
-        	),
-        ),
         'title_format' => Theme_Utils::get_title_format(),
 	);
 }

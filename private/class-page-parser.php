@@ -148,6 +148,9 @@ class Page_Parser
 		if ( $this->wpo->is_paged ) {
 			$this->wpo->is_archive = true;
 		}
+		if ( 'search' == self::get_array_key( 'name', $this->wpo->query_vars, '' ) ) {
+			$this->wpo->is_search = true;
+		}
 		$this->wpo->is_admin = false;
 		switch ( true ) {
 			case $this->wpo->is_404:
@@ -346,7 +349,8 @@ class Page_Parser
 		wp_send_json_success( $obj->get_window_object() );
 	}
 
-	public static function paged_query_request() {
+	public static function paged_query_request()
+	{
 		$c = get_called_class();
 		$data = stripslashes_deep( $_POST );
 		$query = self::get_array_key( 'query', $data, '/' );
@@ -377,8 +381,34 @@ class Page_Parser
 		$data = stripslashes_deep( $_POST );
 		$search = self::get_array_key( 's', $data, '/' );
 		$query = array( 's' => $search );
-		$obj = new $c( $query, '' );
-		wp_send_json_success( $obj->get_window_object() );
+		$wp_query = new WP_Query( $query );
+		$return_object = array();
+		$return_object['title'] = esc_html( apply_filters( 'the_title', self::make_title_from_wp_query( $wp_query ) ) );
+		$return_object['permalink'] = self::get_the_permalink( $wp_query );
+		$return_object['expected_items'] = intval( $wp_query->found_posts );
+		$return_object['current_items'] = 0;
+		$return_object['base_query'] = $wp_query->query;
+		$html = '';
+		$html .= '<div class="sysui-window-list">';
+		foreach ( $wp_query->posts as $post ) {
+			$html .= sprintf( '<a href="%s" class="sysui-window-link">', get_the_permalink( $post ) );
+			if ( has_post_thumbnail( $post ) ) {
+				$icon = get_the_post_thumbnail_url( $post );
+			}
+			else {
+				$icon = Theme_Utils::asset_path( 'images/defaultapp.png' );	
+			}
+			$html .= sprintf( '<span class="sysui-window-icon"><img src="%s" /></span>', esc_attr( $icon ) );
+			$html .= sprintf( '<span class="sysui-window-label">%s</span>', esc_html( apply_filters( 'the_title', get_the_title( $post ) ) ) );
+			$html .= '</a>';
+			$return_object['current_items'] ++;
+		}
+		$html .= '</div>';
+		$return_object['icon'] = Theme_Utils::asset_path( 'images/search.png' );
+		$return_object['content'] = $html;
+		$return_object['width'] = 562;
+		$return_object['height'] = 400;
+		wp_send_json_success( $return_object );
 	}
 
 	private static function get_the_permalink( WP_Query $wp_query )

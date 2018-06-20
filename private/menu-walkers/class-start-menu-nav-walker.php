@@ -132,7 +132,7 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 		$items = array();
 		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/link.png', '', array( 'seperator' ) ) );
 		array_push( $items, self::make_start_menu_item( admin_url(), __( 'Control Panel' ), 'images/controlpanel.png', '' ) );
-		array_push( $items, self::make_start_menu_item( '#', __( 'Search' ), 'images/search.png', '', array( 'sysui-activate-seach' ) ) );
+		array_push( $items, self::make_start_menu_item( get_search_link(), __( 'Search' ), 'images/search.png', '' ) );
 		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/link.png', '', array( 'seperator' ) ) );
 		if ( is_user_logged_in() ) {
 			array_push( $items, self::make_start_menu_item( admin_url( 'profile.php' ), __( 'My Profile' ), get_avatar_url( wp_get_current_user(), array( 'size' => 35, 'default' => 'mm', 'rating' => 'g' ) ) ) );

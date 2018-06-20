@@ -374,9 +374,13 @@ var sysuiwindow = function( args ) {
 			jQuery( '#' + obj.id ).focus();
 		}	
 	}
+	this.triggerOpened = function() {
+		properties.onOpen( obj );
+	}
 	this.populate_paged_items = function( base_query, page, current_items, expected_items ) {
 		get_paged_items( obj, base_query, page, current_items, expected_items );
 	}
+	this.searchterm = '';
 	var get_paged_items = function( obj, base_query, page, current_items, expected_items ) {
 		if ( 'object' !== typeof( base_query ) ) {
 			return;

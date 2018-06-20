@@ -115,14 +115,4 @@ class Theme_Utils
         );
         return $html;
     }
-
-    public static function get_search_window_permalink()
-    {
-        $query = array();
-        if ( isset( $_GET['s'] ) && strlen( $_GET['s'] ) > 0 ) {
-            $query['s'] = $_GET['s'];
-        }
-        $query = http_build_query( $query );
-        return ( strlen( $query ) > 0 ) ? get_search_link( '?' . $query ) : get_search_link();
-    }
 }
