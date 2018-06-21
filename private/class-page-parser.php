@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') || die('Sorry, but you cannot access this page directly.');
+defined( 'ABSPATH' ) || die( 'Sorry, but you cannot access this page directly.' );
 
 /**
  * Utility used to parse pages from their URLs to return the feedback needed for a System UI Window

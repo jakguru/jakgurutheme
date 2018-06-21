@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') || die('Sorry, but you cannot access this page directly.');
+defined( 'ABSPATH' ) || die( 'Sorry, but you cannot access this page directly.' );
 
 /**
  * A Custom class extending Walker_Comment which handles how html for comments is displayed

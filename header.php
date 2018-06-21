@@ -1,4 +1,4 @@
-<?php defined('ABSPATH') || die('Sorry, but you cannot access this page directly.'); ?>
+<?php defined( 'ABSPATH' ) || die( 'Sorry, but you cannot access this page directly.' ); ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 	<head>

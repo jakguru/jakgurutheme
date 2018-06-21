@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') || die('Sorry, but you cannot access this page directly.');
+defined( 'ABSPATH' ) || die( 'Sorry, but you cannot access this page directly.' );
 get_header();
 if ( has_nav_menu( 'desktop' ) ) {
 	wp_nav_menu( array(

@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') || die('Sorry, but you cannot access this page directly.');
+defined( 'ABSPATH' ) || die( 'Sorry, but you cannot access this page directly.' );
 
 class Sysui_Notifications_Area_Nav_Walker extends \Walker_Nav_Menu
 {

@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') || die('Sorry, but you cannot access this page directly.');
+defined( 'ABSPATH' ) || die( 'Sorry, but you cannot access this page directly.' );
 
 if ( ! class_exists( 'WP_List_Table' ) ){
    require_once sprintf( '%swp-admin/includes/class-wp-list-table.php', ABSPATH );

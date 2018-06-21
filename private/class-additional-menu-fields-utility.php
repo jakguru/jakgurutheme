@@ -1,62 +1,97 @@
 <?php
-defined('ABSPATH') || die('Sorry, but you cannot access this page directly.');
-
 /**
  * Utility for adding additional fields to the Menu Editor
+
+ * @package Jak Guru Theme
  */
+
+defined( 'ABSPATH' ) || die( 'Sorry, but you cannot access this page directly.' );
 if ( ! class_exists( 'Walker_Nav_Menu_Edit' ) ) {
 	require_once sprintf( '%swp-admin/includes/nav-menu.php', ABSPATH );
 }
-class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit
-{
+
+/**
+ * Adds additional fields to the WordPress Menu Manager
+ */
+class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit {
+	/**
+	 * New Fields to be added
+
+	 * @var array
+	 */
 	private $new_fields = array();
+
+	/**
+	 * Allowed HTML Tags
+
+	 * @var array
+	 */
 	private $allowed_tags = array(
-		'p' => array(
+		'p'      => array(
 			'class' => true,
 		),
-		'label' => array(
+		'label'  => array(
 			'for' => true,
 		),
-		'br' => true,
-		'input' => array(
-			'id' => true,
-			'class' => true,
-			'name' => true,
-			'value' => true,
+		'br'     => true,
+		'input'  => array(
+			'id'       => true,
+			'class'    => true,
+			'name'     => true,
+			'value'    => true,
 			'required' => true,
-			'type' => true,
-			'checked' => true,
+			'type'     => true,
+			'checked'  => true,
 		),
 		'select' => array(
-			'id' => true,
-			'class' => true,
-			'name' => true,
-			'value' => true,
+			'id'       => true,
+			'class'    => true,
+			'name'     => true,
+			'value'    => true,
 			'required' => true,
 			'multiple' => true,
 		),
 		'option' => array(
-			'value' => true,
+			'value'    => true,
 			'selected' => true,
 		),
-		'div' => array(
-			'id' => true,
+		'div'    => array(
+			'id'    => true,
 			'class' => true,
 		),
-		'span' => array(
-			'id' => true,
+		'span'   => array(
+			'id'    => true,
 			'class' => true,
 		),
-		'a' => array(
-			'href' => true,
-			'for' => true,
-			'id' => true,
+		'a'      => array(
+			'href'  => true,
+			'for'   => true,
+			'id'    => true,
 			'class' => true,
 		),
 	);
 
-	function setup_nav_item( $menu_item )
-	{
+	/**
+	 * The nonce which will be use to validate updates
+
+	 * @var string
+	 */
+	private $nonce = '';
+
+	/**
+	 * Create the Object
+	 */
+	public function __construct() {
+		$this->nonce = wp_create_nonce( 'wp_save_custom_menu_fields' );
+	}
+
+	/**
+	 * Add the new properties to the nav item
+
+	 * @param  Object $menu_item The Item to be Updated.
+	 * @return Object            The Item after it has been updated
+	 */
+	public function setup_nav_item( $menu_item ) {
 		foreach ( $this->new_fields as $key => $field_args ) {
 			$value = get_post_meta( $menu_item->ID, $key, true );
 			if ( ! is_string( $value ) || empty( $value ) ) {
@@ -67,25 +102,47 @@ class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit
 		return $menu_item;
 	}
 
-	function update_nav_item( $menu_id, $args = array() )
-	{
+	/**
+	 * Update the value of the new properties on a nav item on save
+
+	 * @param  Integer $menu_id The ID of the menu item being updated.
+	 * @param  array   $args    Arguments being passed.
+	 * @return void
+	 */
+	public function update_nav_item( $menu_id, $args = array() ) {
 		foreach ( $this->new_fields as $key => $field_args ) {
-			if ( is_array( $_POST[ $key ] ) ) {
-				foreach ( $_POST[ $key ] as $menu_item_db_id => $value ) {
+			check_admin_referer( 'wp_save_custom_menu_fields', 'wpcmf-nonce' );
+			$_post = stripslashes_deep( $_POST );
+			if ( is_array( $_post[ $key ] ) ) {
+				foreach ( $_post[ $key ] as $menu_item_db_id => $value ) {
 					update_post_meta( $menu_item_db_id, $key, $value );
 				}
 			}
 		}
 	}
 
-	function nav_menu_walker( $walker, $menu_id )
-	{
+	/**
+	 * Return the name of the Nav Menu Walker Class Used
+
+	 * @param  Walker   $walker  A Walker.
+	 * @param  Interger $menu_id The Menu ID.
+	 * @return String            The name of the class
+	 */
+	public function nav_menu_walker( $walker, $menu_id ) {
 		$c = get_called_class();
 		return $c;
 	}
 
-	function render_custom_fields( $id, $item, $depth, $args )
-	{
+	/**
+	 * Render the custom field
+
+	 * @param  interger $id    The field ID.
+	 * @param  object   $item  The item.
+	 * @param  interger $depth The field depth.
+	 * @param  array    $args  Some arguments.
+	 * @return void
+	 */
+	public function render_custom_fields( $id, $item, $depth, $args ) {
 		$html = '';
 		foreach ( $this->new_fields as $key => $field_args ) {
 			$html_id = sprintf( 'edit-%s-%d', $key, $item->ID );
@@ -129,6 +186,7 @@ class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit
 	protected function get_fields( $item, $depth, $args = array(), $id = 0 )
 	{
 		ob_start();
+		echo sprintf( '<input type="hidden" name="wpcmf-nonce" value="%s" />', esc_attr( $this->nonce ) );
 		do_action( 'wp_nav_menu_item_custom_fields', $item->ID, $item, $depth, $args, $id );
 		return ob_get_clean();
 	}
