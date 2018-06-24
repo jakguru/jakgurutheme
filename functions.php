@@ -137,6 +137,16 @@ function get_application_script_localizations() {
         		'maximized' => false,
         	),
         ),
+        'defaultnotifications' => array(
+        	'clipboardsuccess' => array(
+        		'icon' => Theme_Utils::asset_path( 'images/info.png' ),
+        		'content' => __( 'Copied to Clipboard successfully' ),
+        	),
+        	'clipboarderror' => array(
+        		'icon' => Theme_Utils::asset_path( 'images/stop.png' ),
+        		'content' => __( 'Errory Copying to Clipboard' ),
+        	),
+        ),
         'title_format' => Theme_Utils::get_title_format(),
 	);
 }
@@ -262,6 +272,35 @@ $wp_customize_utility->enqueue_control( 'cookie_policy_notification_text', array
 	'type' => 'text',
 	'default' => __( 'This site uses cookies and other tracking technologies to assist with navigation and your ability to provide feedback, analyse your use of our products and services, assist with our promotional and marketing efforts, and provide content from third parties.' ),
 ) );
+
+$sharing_destinations = array(
+	'facebook' => __( 'Facebook' ),
+	'google_plus' => __( 'Google Plus' ),
+	'linkedin' => __( 'LinkedIn' ),
+	'twitter' => __( 'Twitter' ),
+	'reddit' => __( 'Reddit' ),
+	'tumbler' => __( 'Tumbler' ),
+	'pintrest' => __( 'Pinterest' ),
+	'telegram' => __( 'Telegram' ),
+	'whatsapp' => __( 'Whatsapp' ),
+	'email' => __( 'Email' ),
+	'other' => __( 'Other Destinations' ),
+);
+
+foreach ( $sharing_destinations as $key => $name ) {
+	$wp_customize_utility->enqueue_control( sprintf( 'allow_share_%s', $key ), array(
+		'label' => sprintf( __( 'Allow Sharing to %s' ), $name ),
+		'description' => sprintf( __( 'Add a sharing link for %s to the sharing menu' ), $name ),
+		'section' => array(
+			'id' => 'sharing',
+			'title' => __( 'Sharing' ),
+			'description' => __( 'Options for Sharing Content on other platforms' ),
+			'priority' => 220,
+		),
+		'type' => 'checkbox',
+		'default' => true,
+	) );
+}
 
 add_action( 'customize_register', array( $wp_customize_utility, 'register' ) );
 add_action( 'wp_enqueue_scripts', function() {

@@ -178,7 +178,6 @@ class Page_Parser
 				$this->window_properties['permalink'] = self::get_the_permalink( $this->wpo );
 				$this->window_properties['expected_items'] = intval( $this->wpo->found_posts );
 				$this->window_properties['current_items'] = 0;
-				//$this->window_properties['base_query'] = array_replace_recursive( $this->original_query, $this->wpo->query );
 				$this->window_properties['base_query'] = $this->wpo->query;
 				$html = '';
 				$html .= '<div class="sysui-window-list">';
@@ -206,7 +205,6 @@ class Page_Parser
 				else {
 					$this->window_properties['content'] = $html;
 				}
-				//$this->window_properties['content'] .= sprintf( '<div class="sysui-text-content">%s</div>', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>' );
 				break;
 
 			case ( $this->wpo->is_single || $this->wpo->is_page ) && is_a( $this->wpo->post, 'WP_Post' ):
@@ -277,6 +275,9 @@ class Page_Parser
 		$obj = new stdClass();
 		foreach ( $this->window_properties as $key => $value ) {
 			$obj->{ $key } = $value;
+		}
+		if ( property_exists( $obj, 'menus' ) && is_array( $obj->menus ) ) {
+			$obj->menus = self::filter_menus( $obj->menus, $obj );
 		}
 		return $obj;
 	}
@@ -429,7 +430,6 @@ class Page_Parser
 			'comment_author_email' => $wp_user->user_email,
 			'comment_author_url' => $wp_user->user_url,
 		);
-		//wp_send_json_error( print_r( $comment_data, true ) );
 		$res = wp_new_comment( $comment_data, true );
 		if ( is_a( $res, 'WP_Error' ) ) {
 			wp_send_json_error( $res->get_error_message() );
@@ -571,5 +571,129 @@ class Page_Parser
 			$html .= ' ' . __( 'and' ) . ' ' . $last;
 		}
 		return $html;
+	}
+
+	private static function filter_menus( $menus, $obj ) {
+		$sharing_menu = array(
+			'title' => __( 'Sharing' ),
+			'items' => array(),
+		);
+
+		$sharing_destinations = array(
+			'facebook' => array(
+				'title' => __( 'Share on Facebook' ),
+				'url' => 'https://www.facebook.com/sharer/sharer.php',
+				'urlparams' => array(
+					'u' => $obj->permalink,
+					't' => $obj->title,
+				),
+				'target' => '_blank',
+			),
+			'google_plus' => array(
+				'title' => __( 'Share on Google+' ),
+				'url' => 'https://plus.google.com/share',
+				'urlparams' => array(
+					'url' => $obj->permalink,
+				),
+				'target' => '_blank',
+			),
+			'linkedin' => array(
+				'title' => __( 'Share on LinkedIn' ),
+				'url' => 'https://www.linkedin.com/shareArticle',
+				'urlparams' => array(
+					'url' => $obj->permalink,
+					'mini' => 'true',
+					'title' => $obj->title,
+					'source' => home_url(),
+				),
+				'target' => '_blank',
+			),
+			'twitter' => array(
+				'title' => __( 'Share on Twitter' ),
+				'url' => 'https://twitter.com/share',
+				'urlparams' => array(
+					'url' => $obj->permalink,
+					'text' => $obj->title,
+				),
+				'target' => '_blank',
+			),
+			'reddit' => array(
+				'title' => __( 'Share on Reddit' ),
+				'url' => 'https://www.reddit.com/submit',
+				'urlparams' => array(
+					'url' => $obj->permalink,
+					'title' => $obj->title,
+				),
+				'target' => '_blank',
+			),
+			'tumbler' => array(
+				'title' => __( 'Share on Tumbler' ),
+				'url' => 'https://www.tumblr.com/share/link',
+				'urlparams' => array(
+					'url' => $obj->permalink,
+					'name' => $obj->title,
+				),
+				'target' => '_blank',
+			),
+			'pintrest' => array(
+				'title' => __( 'Share on Pintrest' ),
+				'url' => 'https://pinterest.com/pin/create/button/',
+				'urlparams' => array(
+					'url' => $obj->permalink,
+					'description' => $obj->title,
+				),
+				'target' => '_blank',
+			),
+			'telegram' => array(
+				'title' => __( 'Share on Telegram' ),
+				'url' => 'https://telegram.me/share/url',
+				'urlparams' => array(
+					'url' => $obj->permalink,
+					'text' => $obj->obj->title,
+				),
+				'target' => '_blank',
+			),
+			'whatsapp' => array(
+				'title' => __( 'Share on Whatsapp' ),
+				'url' => 'whatsapp://send',
+				'urlparams' => array(
+					'text' => sprintf( '%s' . "\r\n", '%s', $obj->title, $obj->permalink ),
+				),
+				'target' => '_blank',
+			),
+			'email' => array(
+				'title' => __( 'Share by Email' ),
+				'url' => 'mailto:',
+				'urlparams' => array(
+					'subject' => $obj->title,
+					'body' => $obj->permalink,
+				),
+				'target' => '_blank',
+			),
+			'other' => array(
+				'title' => __( 'Copy Sharable URL' ),
+				'url' => $obj->permalink,
+				'class' => 'sysui-copy-link',
+			),
+		);
+		foreach ( $sharing_destinations as $destination => $info ) {
+			$enabled = get_theme_mod( sprintf( 'allow_share_%s', $destination ), true );
+			if ( true === $enabled && array_key_exists( 'url', $info ) ) {
+				$url = $info['url'];
+				if ( array_key_exists( 'urlparams', $info ) ) {
+					$url .= '?' . http_build_query( $info['urlparams'] );
+				}
+				array_push( $sharing_menu['items'], array(
+					'title' => $info['title'],
+					'href' => $url,
+					'target' => ( array_key_exists( 'target', $info ) ) ? $info['target'] : '',
+					'class' => ( array_key_exists( 'class', $info ) ) ? $info['class'] : '',
+				) );
+			}
+		}
+		if ( count( $sharing_menu['items'] ) > 0 ) {
+			array_push( $menus, $sharing_menu );
+		}
+		return $menus;
 	}
 }

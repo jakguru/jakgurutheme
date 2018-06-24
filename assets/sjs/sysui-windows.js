@@ -166,7 +166,8 @@ var sysuiwindow = function( args ) {
 				menuhtml += '<div class="sysui-panel-inner">';
 				for (var mi = 0; mi < m.items.length; mi++) {
 					var menuitem = m.items[mi];
-					menuhtml += sprintf( '<a href="%s" class="sysui-window-menu-dropdown-item %s">%s</a>', menuitem.href, menuitem.class, menuitem.title );
+					var target = ( 'string' == typeof( menuitem.target ) ) ? menuitem.target : '';
+					menuhtml += sprintf( '<a href="%s" class="sysui-window-menu-dropdown-item %s" target="%s">%s</a>', menuitem.href, menuitem.class, target, menuitem.title );
 				}
 				menuhtml += '</div>';
 				menuhtml += '</div>';

@@ -1,6 +1,9 @@
 @import "../../node_modules/sprintf-js/src/sprintf.js";
 @import "../../node_modules/moment/min/moment-with-locales.js";
 @import "../../node_modules/js-cookie/src/js.cookie.js";
+@import "../../node_modules/clipboard/dist/clipboard.js";
+
+var clipboard;
 
 jQuery( document ).ready(function() {
 	document.oncontextmenu = function( e ) {
@@ -18,6 +21,19 @@ jQuery( document ).ready(function() {
 		var State = History.getState(); // Note: We are using History.getState() instead of event.state
 	});
 	show_cookie_policy_notification();
+	jQuery( '.sysui-copy-link' ).on( 'click', function( e ) { e.preventDefault(); } );
+	clipboard = new ClipboardJS( '.sysui-copy-link', {
+		text: function( trigger ) {
+			var url = jQuery( trigger ).attr( 'href' );
+			return url;
+		}
+	});
+	clipboard.on('success', function(e) {
+		new sysuinotification( app.defaultnotifications.clipboardsuccess );
+	});
+	clipboard.on('error', function(e) {
+		new sysuinotification( app.defaultnotifications.clipboarderror );
+	});
 });
 
 jQuery( '.custom-logo-link' ).on( 'click', function( e ) {

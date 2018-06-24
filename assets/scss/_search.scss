@@ -74,3 +74,31 @@
 	height: 100%;
 	overflow: auto;
 }
+
+.sysui-search-left-panel-form label,
+.sysui-search-left-panel-form label:hover,
+.sysui-search-left-panel-form label:focus,
+.sysui-search-left-panel-form label:active {
+	font-size: 12px;
+	line-height: 12px;
+}
+
+.sysui-search-left-panel-form .form-control,
+.sysui-search-left-panel-form .form-control:hover,
+.sysui-search-left-panel-form .form-control:focus,
+.sysui-search-left-panel-form .form-control:active {
+	font-size: 12px;
+	line-height: 12px;
+}
+
+.sysui-search-left-panel-form button,
+.sysui-search-left-panel-form button:hover,
+.sysui-search-left-panel-form button:focus,
+.sysui-search-left-panel-form button:active,
+.sysui-search-left-panel-form button *,
+.sysui-search-left-panel-form button *:hover,
+.sysui-search-left-panel-form button *:focus,
+.sysui-search-left-panel-form button *:active {
+	line-height: 12px;
+	font-size: 12px;
+}

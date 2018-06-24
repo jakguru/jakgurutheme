@@ -76,6 +76,12 @@ $font-weights: map-merge((
 ), $font-weights);
 
 
+.sysui-text-content {
+  font-size: 12px;
+  line-height: 12px;
+  margin-bottom: 10px;
+}
+
 @each $tag, $size in $font-sizes {
   .sysui-text-content #{$tag},
   .sysui-text-content #{$tag}:hover,
