@@ -111,7 +111,10 @@ class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit {
 	 */
 	public function update_nav_item( $menu_id, $args = array() ) {
 		foreach ( $this->new_fields as $key => $field_args ) {
-			check_admin_referer( 'wp_save_custom_menu_fields', 'wpcmf-nonce' );
+			$validation = check_ajax_referer( 'wp_save_custom_menu_fields', 'wpcmf-nonce', false );
+			if ( false === $validation ) {
+				return;
+			}
 			$_post = stripslashes_deep( $_POST );
 			if ( is_array( $_post[ $key ] ) ) {
 				foreach ( $_post[ $key ] as $menu_item_db_id => $value ) {
