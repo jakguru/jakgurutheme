@@ -649,7 +649,7 @@ class Page_Parser
 				'url' => 'https://telegram.me/share/url',
 				'urlparams' => array(
 					'url' => $obj->permalink,
-					'text' => $obj->obj->title,
+					'text' => $obj->title,
 				),
 				'target' => '_blank',
 			),
@@ -657,7 +657,7 @@ class Page_Parser
 				'title' => __( 'Share on Whatsapp' ),
 				'url' => 'whatsapp://send',
 				'urlparams' => array(
-					'text' => sprintf( '%s' . "\r\n", '%s', $obj->title, $obj->permalink ),
+					'text' => $obj->permalink,
 				),
 				'target' => '_blank',
 			),
