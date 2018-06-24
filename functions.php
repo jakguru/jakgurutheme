@@ -329,6 +329,11 @@ add_filter( 'wp_nav_menu_objects', function( $sorted_menu_items, $args ) {
 		$additional_items = Start_Menu_Nav_Walker::get_start_menu_nav_items();
 		$additional_admin_items = Start_Menu_Nav_Walker::get_start_menu_admin_items();
 		$sorted_menu_items = array_merge( $additional_admin_items, $sorted_menu_items, $additional_items );
+
+		//echo '<pre>';
+		//print_r( $sorted_menu_items );
+		//echo '</pre>';
+		//exit();
 	}
 	return $sorted_menu_items;
 }, 30, 2 );

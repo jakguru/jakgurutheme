@@ -77,7 +77,7 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 		$output .= $html;
 	}
 
-	private static function make_start_menu_item( $url = '#', $label = 'A Start Menu Link', $asset = 'images/link.png', $target = '', $classes = array(), $children = array() )
+	private static function make_start_menu_item( $url = '#', $label = 'A Start Menu Link', $asset = 'images/link.png', $target = '', $classes = array(), &$children = array() )
 	{
 		$item = new stdClass();
 		$item->ID = 0;
@@ -121,6 +121,18 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 		$item->current = '';
 		$item->current_item_ancestor = '';
 		$item->current_item_parent = '';
+		if ( is_array( $children ) && count( $children ) > 0 ) {
+			$item->ID = intval( time() * time() * rand( 1, 9 ) );
+			$item->db_id = $item->ID;
+			$item->object_id = $item->ID;
+			$menu_order = 1;
+			array_push( $item->classes, 'menu-item-has-children' );
+			foreach ( $children as &$child ) {
+				$child->menu_item_parent = $item->ID;
+				$child->menu_order = $menu_order;
+				$menu_order ++;
+			}
+		}
 		return $item;
 	}
 
@@ -131,11 +143,18 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 		}
 		$items = array();
 		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/link.png', '', array( 'seperator' ) ) );
-		if ( current_user_can( 'customize' ) ) {
-			array_push( $items, self::make_start_menu_item( admin_url( sprintf( 'customize.php?%s', http_build_query( array( 'return' => home_url() ) ) ) ), __( 'Control Panel' ), 'images/controlpanel.png', '' ) );
+
+		$control_panel_children = array();
+
+		if ( is_user_logged_in() ) {
+			array_push( $control_panel_children, self::make_start_menu_item( admin_url(), __( 'WordPress Dashboard' ), 'images/defaultapp.png', '' ) );
 		}
-		else {
-			array_push( $items, self::make_start_menu_item( admin_url(), __( 'Control Panel' ), 'images/controlpanel.png', '' ) );
+		if ( current_user_can( 'customize' ) ) {
+			array_push( $control_panel_children, self::make_start_menu_item( admin_url( sprintf( 'customize.php?%s', http_build_query( array( 'return' => home_url() ) ) ) ), __( 'Customize' ), 'images/controlpanel.png', '' ) );
+		}
+		if ( count( $control_panel_children ) > 0 ) {
+			array_push( $items, self::make_start_menu_item( '#', __( 'Control Panel' ), 'images/controlpanel.png', '', array(), $control_panel_children ) );
+			$items = array_merge( $items, $control_panel_children );
 		}
 		array_push( $items, self::make_start_menu_item( get_search_link(), __( 'Search' ), 'images/search.png', '' ) );
 		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/link.png', '', array( 'seperator' ) ) );
