@@ -199,51 +199,6 @@
 	cursor: nwse-resize;
 }
 
-.sysui-panel-window-content *,
-.sysui-panel-window-content *:active,
-.sysui-panel-window-content *:focus,
-.sysui-panel-window-content *:hover {
-	font-size: 12px;
-	line-height: 12px;
-}
-
-.sysui-panel-window-content code,
-.sysui-panel-window-content code:active,
-.sysui-panel-window-content code:focus,
-.sysui-panel-window-content code:hover,
-.sysui-panel-window-content pre,
-.sysui-panel-window-content pre:active,
-.sysui-panel-window-content pre:focus,
-.sysui-panel-window-content pre:hover {
-	font-size: 12px;
-	line-height: 1rem;
-	margin: 10px 0;
-}
-
-.sysui-panel-window-content code,
-.sysui-panel-window-content code:active,
-.sysui-panel-window-content code:focus,
-.sysui-panel-window-content code:hover {
-	display: inline-block;
-	color: $sysui-code-color;
-}
-
-.sysui-panel-window-content pre,
-.sysui-panel-window-content pre:active,
-.sysui-panel-window-content pre:focus,
-.sysui-panel-window-content pre:hover {
-	display: block;
-}
-
-.sysui-panel-window-content blockquote,
-.sysui-panel-window-content blockquote:active,
-.sysui-panel-window-content blockquote:focus,
-.sysui-panel-window-content blockquote:hover {
-	display: block;
-	border-left: solid 5px $border-outer-light;
-	padding-left: 15px;
-}
-
 .sysui-window-menu-dropdown-item {
 	background: $panel-bg;
 	background-color: $panel-bg;

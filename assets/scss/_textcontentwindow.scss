@@ -1,0 +1,97 @@
+.sysui-panel-window-content code,
+.sysui-panel-window-content code:active,
+.sysui-panel-window-content code:focus,
+.sysui-panel-window-content code:hover {
+	display: inline-block;
+	color: $sysui-code-color;
+}
+
+.sysui-panel-window-content pre,
+.sysui-panel-window-content pre:active,
+.sysui-panel-window-content pre:focus,
+.sysui-panel-window-content pre:hover {
+	display: block;
+}
+
+.sysui-panel-window-content blockquote,
+.sysui-panel-window-content blockquote:active,
+.sysui-panel-window-content blockquote:focus,
+.sysui-panel-window-content blockquote:hover {
+	display: block;
+	border-left: solid 5px $border-outer-light;
+	padding-left: 15px;
+}
+
+.sysui-text-content code,
+.sysui-text-content code:hover,
+.sysui-text-content code:focus,
+.sysui-text-content code:active,
+.sysui-text-content pre,
+.sysui-text-content pre:hover,
+.sysui-text-content pre:focus,
+.sysui-text-content pre:active {
+	max-width: 100%;
+	overflow-x: auto;
+	line-height: 12px;
+}
+
+.sysui-text-content code,
+.sysui-text-content code:hover,
+.sysui-text-content code:focus,
+.sysui-text-content code:active {
+	white-space: pre;
+	margin: 0;
+	position: relative;
+	top: 4px;
+}
+
+.sysui-text-content pre,
+.sysui-text-content pre:hover,
+.sysui-text-content pre:focus,
+.sysui-text-content pre:active {
+	white-space: pre;
+	margin: 10px 0;
+}
+
+$font-sizes: () !default;
+$font-sizes: map-merge((
+  "*": 12px,
+  "h1": 1.8rem,
+  "h2": 1.4rem,
+  "h3": 1.2rem,
+  "h4": 1.1rem,
+  "h5": 1rem,
+  "h6": 0.9rem,
+), $font-sizes);
+
+$font-weights: () !default;
+$font-weights: map-merge((
+  "h1": bold,
+  "h2": bold,
+  "h3": bold,
+  "h4": bold,
+  "h5": bold,
+  "h6": bold,
+  "p": 400,
+), $font-weights);
+
+
+@each $tag, $size in $font-sizes {
+  .sysui-text-content #{$tag},
+  .sysui-text-content #{$tag}:hover,
+  .sysui-text-content #{$tag}:focus,
+  .sysui-text-content #{$tag}:active {
+    font-size: $size;
+    line-height: $size;
+    margin-bottom: 10px;
+  }
+}
+
+@each $tag, $weight in $font-weights {
+  .sysui-text-content #{$tag},
+  .sysui-text-content #{$tag}:hover,
+  .sysui-text-content #{$tag}:focus,
+  .sysui-text-content #{$tag}:active {
+    font-weight: $weight;
+  }
+}

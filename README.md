@@ -105,7 +105,8 @@ This project has the following gulp commands configured:
 │   │   ├── _startmenu.scss
 │   │   ├── _sysui.scss
 │   │   ├── _sysuiwindow.scss
-│   │   └── _taskbar.scss
+│   │   ├── _taskbar.scss
+│   │   └── _textcontentwindow.scss
 │   ├── sjs
 │   │   ├── bootstrap.js
 │   │   ├── core.js
