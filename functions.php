@@ -327,7 +327,8 @@ add_action( 'wp_nav_menu_item_custom_fields', array( $additional_menu_fields_uti
 add_filter( 'wp_nav_menu_objects', function( $sorted_menu_items, $args ) {
 	if ( 'start_menu' == $args->theme_location ) {
 		$additional_items = Start_Menu_Nav_Walker::get_start_menu_nav_items();
-		$sorted_menu_items = array_merge( $sorted_menu_items, $additional_items );
+		$additional_admin_items = Start_Menu_Nav_Walker::get_start_menu_admin_items();
+		$sorted_menu_items = array_merge( $additional_admin_items, $sorted_menu_items, $additional_items );
 	}
 	return $sorted_menu_items;
 }, 30, 2 );

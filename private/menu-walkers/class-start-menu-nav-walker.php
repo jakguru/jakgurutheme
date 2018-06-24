@@ -131,7 +131,12 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 		}
 		$items = array();
 		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/link.png', '', array( 'seperator' ) ) );
-		array_push( $items, self::make_start_menu_item( admin_url(), __( 'Control Panel' ), 'images/controlpanel.png', '' ) );
+		if ( current_user_can( 'customize' ) ) {
+			array_push( $items, self::make_start_menu_item( admin_url( sprintf( 'customize.php?%s', http_build_query( array( 'return' => home_url() ) ) ) ), __( 'Control Panel' ), 'images/controlpanel.png', '' ) );
+		}
+		else {
+			array_push( $items, self::make_start_menu_item( admin_url(), __( 'Control Panel' ), 'images/controlpanel.png', '' ) );
+		}
 		array_push( $items, self::make_start_menu_item( get_search_link(), __( 'Search' ), 'images/search.png', '' ) );
 		array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/link.png', '', array( 'seperator' ) ) );
 		if ( is_user_logged_in() ) {
@@ -143,6 +148,23 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 			if ( get_option( 'users_can_register' ) ) {
 				array_push( $items, self::make_start_menu_item( wp_registration_url(), __( 'Register' ), 'images/keys.png' ) );
 			}
+		}
+		return $items;
+	}
+
+	public static function get_start_menu_admin_items( $current = null )
+	{
+		if ( is_null( $current ) || empty( $current ) ) {
+			$current = home_url();
+		}
+		$items = array();
+		$has_seperator = false;
+		if ( current_user_can( 'edit_posts' ) ) {
+			array_push( $items, self::make_start_menu_item( admin_url( 'post-new.php' ), __( 'New Post' ), 'images/notepad.png', '' ) );
+			$has_seperator = true;
+		}
+		if ( true === $has_seperator ) {
+			array_push( $items, self::make_start_menu_item( '#', __( 'Seperator' ), 'images/link.png', '', array( 'seperator' ) ) );
 		}
 		return $items;
 	}
@@ -160,7 +182,8 @@ class Start_Menu_Nav_Walker extends \Walker_Nav_Menu
 		}
 
 		$args->menu = '';
-		$menu_items = self::get_start_menu_nav_items();
+		$menu_items = self::get_start_menu_admin_items();
+		$menu_items = array_merge( $menu_items, self::get_start_menu_nav_items() );
 		$nav_menu = $items = '';
 		if ( $args->container ) {
 			$allowed_tags = apply_filters( 'wp_nav_menu_container_allowedtags', array( 'div', 'nav' ) );

@@ -41,7 +41,7 @@ class Page_Parser
 		$this->query_vars = array();
 		$post_type_query_vars = array();
 		$rewrite = $wp_rewrite->wp_rewrite_rules();
-		if ( ! empty( $rewrite ) && '/?p=' !== substr( $query, 0, 4 ) && '/?s=' !== substr( $query, 0, 4 ) && ! is_array( $query ) ) {
+		if ( ! empty( $rewrite ) && ! is_array( $query ) && '/?' !== substr( $query, 0, 2 ) && '?' !== substr( $query, 0, 1 ) ) {
 			$requested_file = trim( $query, '/' );
 			$request_match = trim( $query, '/' );
 			if ( empty( $request_match ) ) {
@@ -263,8 +263,8 @@ class Page_Parser
 				break;
 			
 			default:
-				//$this->make_error_window( 'Debug', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>', true );
-				//return;
+				$this->make_error_window( 'Debug', '<pre>' . htmlentities( print_r( $this->wpo, true ) ) . '</pre>', true );
+				return;
 				$this->make_error_window( 'Item not Found', 'Sorry, but the item you have requested could not be found' );
 				break;
 		}
