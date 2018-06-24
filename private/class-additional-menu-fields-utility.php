@@ -145,35 +145,49 @@ class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit {
 	public function render_custom_fields( $id, $item, $depth, $args ) {
 		$html = '';
 		foreach ( $this->new_fields as $key => $field_args ) {
-			$html_id = sprintf( 'edit-%s-%d', $key, $item->ID );
+			$html_id   = sprintf( 'edit-%s-%d', $key, $item->ID );
 			$html_name = sprintf( '%s[%d]', $key, $item->ID );
-			$value = get_post_meta( $item->ID, $key, true );
+			$value     = get_post_meta( $item->ID, $key, true );
 			if ( ! is_string( $value ) || empty( $value ) ) {
 				$value = self::get_array_key( 'default', $field_args );
 			}
 			$html .= sprintf( '<p class="description description-wide description-id field-%s">', $key );
 			$html .= sprintf( '<label for="%s">%s<br />', $html_id, self::get_array_key( 'label', $field_args ) );
-			$html .= self::render_field_html( $html_id, $html_name, $value, ( true == self::get_array_key( 'required', $field_args ) ), self::get_array_key( 'type', $field_args, 'text' ), self::get_array_key( 'options', $field_args, array() ) );
+			$html .= self::render_field_html( $html_id, $html_name, $value, ( true === self::get_array_key( 'required', $field_args ) ), self::get_array_key( 'type', $field_args, 'text' ), self::get_array_key( 'options', $field_args, array() ) );
 			$html .= '</label>';
 			$html .= '</p>';
 		}
 		echo wp_kses( $html, $this->allowed_tags );
 	}
 
-	function add_field( $id, $args = array() )
-	{
-		$defaults = array(
-			'label' => __( 'Custom Field' ),
-			'type' => 'text',
-			'default' => null,
+	/**
+	 * Add a new custom field
+
+	 * @param text  $id   the identifier / key of the field to be added.
+	 * @param array $args field arguments.
+	 */
+	public function add_field( $id, $args = array() ) {
+		$defaults                = array(
+			'label'    => __( 'Custom Field' ),
+			'type'     => 'text',
+			'default'  => null,
 			'required' => false,
 		);
-		$arguments = array_replace_recursive( $defaults, $args );
+		$arguments               = array_replace_recursive( $defaults, $args );
 		$this->new_fields[ $id ] = $arguments;
 	}
 
-	function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 )
-	{
+	/**
+	 * Print the beginning of an item
+
+	 * @param  string  $output The HTML Output.
+	 * @param  object  $item    The menu item.
+	 * @param  integer $depth   The menu depth.
+	 * @param  array   $args    The menu item arguments.
+	 * @param  integer $id      The menu item id.
+	 * @return void
+	 */
+	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
 		$item_output = '';
 		parent::start_el( $item_output, $item, $depth, $args, $id );
 		$output .= preg_replace(
@@ -183,26 +197,44 @@ class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit {
 		);
 	}
 
-	protected function get_fields( $item, $depth, $args = array(), $id = 0 )
-	{
+	/**
+	 * Get the new fields
+
+	 * @param  object   $item  the menu item.
+	 * @param  interger $depth the depth of the menu item.
+	 * @param  array    $args  the menu item arguments.
+	 * @param  integer  $id    the menu item id number.
+	 * @return text            the field html.
+	 */
+	protected function get_fields( $item, $depth, $args = array(), $id = 0 ) {
 		ob_start();
 		echo sprintf( '<input type="hidden" name="wpcmf-nonce" value="%s" />', esc_attr( $this->nonce ) );
 		do_action( 'wp_nav_menu_item_custom_fields', $item->ID, $item, $depth, $args, $id );
 		return ob_get_clean();
 	}
 
-	private static function render_field_html( $id, $name, $value = null, $required = true, $type = 'text', $options = array() )
-	{
+	/**
+	 * Render an HTML field for custom fields
+
+	 * @param  text    $id       the field id.
+	 * @param  text    $name     the name of the field.
+	 * @param  mixed   $value    the current value of the field.
+	 * @param  boolean $required if the field is required or not.
+	 * @param  string  $type     the field type.
+	 * @param  array   $options  options for a select, radio or checkbox field.
+	 * @return string            the html to be returned.
+	 */
+	private static function render_field_html( $id, $name, $value = null, $required = true, $type = 'text', $options = array() ) {
 		$html = '';
 		switch ( $type ) {
 			case 'multiselect':
 				$html .= sprintf(
 					'<select id="%s" name="%s" class="widefat %s" %s multiple>',
-					$id, $name, $id, ( true == $required ) ? 'required' : ''
+					$id, $name, $id, ( true === $required ) ? 'required' : ''
 				);
 				if ( is_array( $options ) ) {
 					foreach ( $options as $option_value => $label ) {
-						$html .= sprintf( '<option value="%s" %s>%s</option>', $option_value, ( $value == $option_value ) ? 'selected' : '', $label );
+						$html .= sprintf( '<option value="%s" %s>%s</option>', $option_value, ( $value === $option_value ) ? 'selected' : '', $label );
 					}
 				}
 				$html .= '</select>';
@@ -211,11 +243,11 @@ class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit {
 			case 'select':
 				$html .= sprintf(
 					'<select id="%s" name="%s" class="widefat %s" %s>',
-					$id, $name, $id, ( true == $required ) ? 'required' : ''
+					$id, $name, $id, ( true === $required ) ? 'required' : ''
 				);
 				if ( is_array( $options ) ) {
 					foreach ( $options as $option_value => $label ) {
-						$html .= sprintf( '<option value="%s" %s>%s</option>', $option_value, ( $value == $option_value ) ? 'selected' : '', $label );
+						$html .= sprintf( '<option value="%s" %s>%s</option>', $option_value, ( $value === $option_value ) ? 'selected' : '', $label );
 					}
 				}
 				$html .= '</select>';
@@ -224,7 +256,7 @@ class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit {
 			case 'textarea':
 				$html .= sprintf(
 					'<textarea id="%s" name="%s" class="widefat %s" %s>%s</textarea>',
-					$id, $name, $id, ( true == $required ) ? 'required' : '', $value
+					$id, $name, $id, ( true === $required ) ? 'required' : '', $value
 				);
 				break;
 
@@ -237,22 +269,29 @@ class Additional_Menu_Fields_Utility extends \Walker_Nav_Menu_Edit {
 					$id, __( 'Choose Image' ), __( 'Refresh Preview' )
 				);
 				$html .= '</span>';
-				$html .= sprintf( '<input type="text" name="%s" value="%s" class="widefat" %s />', $name, $value, ( true == $required ) ? 'required' : '' );
+				$html .= sprintf( '<input type="text" name="%s" value="%s" class="widefat" %s />', $name, $value, ( true === $required ) ? 'required' : '' );
 				$html .= '</span>';
 				break;
-			
+
 			default:
 				$html .= sprintf(
 					'<input type="%s" id="%s" name="%s" class="widefat %s" value="%s" %s>',
-					$type, $id, $name, $id, $value, ( true == $required ) ? 'required' : ''
+					$type, $id, $name, $id, $value, ( true === $required ) ? 'required' : ''
 				);
 				break;
 		}
 		return $html;
 	}
 
-	private static function get_array_key( $key, $array, $default = null )
-	{
+	/**
+	 * Get the value or default value from an array by its key
+
+	 * @param  string $key     the key to retrive the value from.
+	 * @param  array  $array   the array to retrieve the value from.
+	 * @param  mixed  $default the default value to be returned if the key isn't set.
+	 * @return mixed           the value to be returned.
+	 */
+	private static function get_array_key( $key, $array, $default = null ) {
 		if ( is_array( $array ) && array_key_exists( $key, $array ) ) {
 			return $array[ $key ];
 		}
