@@ -16,8 +16,6 @@ This theme is a technology demonstrator for WordPress. It is designed to show ju
  * Adding WP Customize Controls
  * Adding Custom Fields to the WordPress Menu Editor
  * Custom Navigation Menu Walkers
- 
-Note that there will be some changes done in the future!
 
 ## Dev Notes
 
